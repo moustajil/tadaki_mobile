@@ -1,12 +1,7 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/get_navigation.dart';
 import 'package:tadakir/Controller/API.dart';
 import 'package:tadakir/Controller/ControllerSharedPrefrances.dart';
-import 'package:tadakir/Exceptions/NotAuthenticatedException.dart';
-import 'package:tadakir/Repository/CartRepository.dart';
 
 class Informationofcommand extends StatefulWidget {
   const Informationofcommand({super.key});
@@ -17,7 +12,6 @@ class Informationofcommand extends StatefulWidget {
 
 class _InformationofcommandState extends State<Informationofcommand> {
   final sharedPrefs = ControllerSharedPreferences();
-  CartRepository cartRepository = new CartRepository();
   Map<String, dynamic> commandDetail = {};
   late Timer _timer;
   int _remainingSeconds = 600;
@@ -275,47 +269,47 @@ class _InformationofcommandState extends State<Informationofcommand> {
                       ],
                     ),
                     // Content rows (6 rows)
-                    // for (int i = 1; i <= 11; i++)
-                    //   const TableRow(
-                    //     children: [
-                    //       Padding(
-                    //         padding: const EdgeInsets.all(8.0),
-                    //         child: Text(
-                    //           // commandDetail[0]["tickets"][i]["tribune"],
-                    //           "hello",
-                    //           textAlign: TextAlign.center,
-                    //         ),
-                    //       ),
-                    //       Padding(
-                    //         padding: const EdgeInsets.all(8.0),
-                    //         child: Text(
-                    //           "hello",
-                    //           textAlign: TextAlign.center,
-                    //         ),
-                    //       ),
-                    //       Padding(
-                    //         padding: const EdgeInsets.all(8.0),
-                    //         child: Text(
-                    //           "hello",
-                    //           textAlign: TextAlign.center,
-                    //         ),
-                    //       ),
-                    //       Padding(
-                    //         padding: const EdgeInsets.all(8.0),
-                    //         child: Text(
-                    //           "hello",
-                    //           textAlign: TextAlign.center,
-                    //         ),
-                    //       ),
-                    //       Padding(
-                    //         padding: const EdgeInsets.all(8.0),
-                    //         child: Text(
-                    //           "hello",
-                    //           textAlign: TextAlign.center,
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ),
+                    for (int i = 1; i <= commandDetail.length; i++)
+                      const TableRow(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              // commandDetail[0]["tickets"][i]["tribune"],
+                              "hello",
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "hello",
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "hello",
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "hello",
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "hello",
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ],
+                      ),
                   ],
                 ),
               ),
@@ -351,11 +345,11 @@ class _InformationofcommandState extends State<Informationofcommand> {
                     ),
                   ),
                   onPressed: () {
-                    try {
-                      cartRepository.deleteCart();
-                    } on NotAuthenticatedException catch (e) {
-                      // tmxi login
-                    }
+                    // try {
+                    //   cartRepository.deleteCart();
+                    // } on NotAuthenticatedException catch (e) {
+                    //   // tmxi login
+                    // }
                   },
                   child: const Text(
                     "Cancel",
