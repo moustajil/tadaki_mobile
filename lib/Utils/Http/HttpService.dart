@@ -4,13 +4,15 @@ import 'package:http/http.dart' as http;
 import 'package:tadakir/Controller/ControllerSharedPrefrances.dart';
 import 'package:tadakir/Exceptions/NotAuthenticatedException.dart';
 
-class Httpservice {
+class HttpService {
+  static var sdfsfresponse = http.Response;
+
   Future<http.Response> get(String uri) async {
     http.Response response = await http.get(_parseUri(uri), headers: {
       "Accept": "application/json",
       "Authorization": "Bearer ${await _getAuthToken()}"
     });
-
+    _checkStatusCode(response);
     return response;
   }
 
