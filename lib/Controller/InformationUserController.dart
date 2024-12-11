@@ -71,4 +71,55 @@ class Informationusercontroller extends GetxController {
       return [];
     }
   }
+
+  Future<void> updateInformation(
+      BuildContext context,
+      String token,
+      String nom,
+      String prenom,
+      String sex,
+      String birthade,
+      String telephone,
+      String cin,
+      String ville,
+      String email) async {
+    try {
+      final response = await http.put(
+        Uri.parse('$baseUrl/api/mobile/profile/update'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode({
+          'nom': nom,
+          'prenom': prenom,
+          'sex': sex,
+          'birthdate': birthade,
+          'telephone': telephone,
+          'cin': cin,
+          'ville': ville,
+          'email': email,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        // Parse the response body and return the list of cities
+        final Map<String, dynamic> responseBody = jsonDecode(response.body);
+        print("ttttttttttttttttttttt ${responseBody['message']}");
+      } else {
+        // Handle HTTP error response
+        if (context.mounted) {
+          showDialogForResponse(
+            context,
+            'Error',
+            'Failed to fetch : ${response.statusCode} ---- ${jsonDecode(response.body)}',
+          );
+        }
+        print(
+            'Failed to fetch : ${response.statusCode} - ${response.body}   --------- ${jsonDecode(response.body)}');
+      }
+    } catch (e) {
+      print('Error in updateInformation: $e');
+    }
+  }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tadakir/Controller/ControllerSharedPrefrances.dart';
 import 'package:tadakir/Controller/InformationUserController.dart';
+import 'package:tadakir/View/ShowDialog/ShowDialog.dart';
 
 class Profileinformation extends StatefulWidget {
   const Profileinformation({super.key});
@@ -188,8 +189,44 @@ class _ProfileinformationState extends State<Profileinformation> {
               ),
               const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: () {
-                  // Handle submission or form validation
+                onPressed: () async {
+                  // Retrieve the token asynchronously
+                  String? token = await sharedPrefs.getToken();
+
+                  // Check if the token is valid
+                  if (token == null || token.isEmpty) {
+                    if (context.mounted) {
+                      showDialogForResponse(
+                          context, "Error", "Token is not available.");
+                    }
+                    return;
+                  }
+
+                  // Retrieve user information safely with null checks
+                  final nom = _nomController.text.toString();
+                  final prenom = _prenomController.text.toString();
+                  final sex =
+                      isMale.value ? 'homme' : (isFemale.value ? 'femme' : '');
+                  final birthade = _dateNaissanceController.text.toString();
+                  final telephone = _phoneController.text.toString();
+                  final cin = _cinController.text.toString();
+                  final ville = selectedVille.toString();
+                  final email = _emailController.text.toString();
+
+                  // Call the updateInformation method
+                  infoUserController.updateInformation(
+                    // ignore: use_build_context_synchronously
+                    context,
+                    token,
+                    nom,
+                    prenom,
+                    sex,
+                    birthade,
+                    telephone,
+                    cin,
+                    ville,
+                    email,
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.white,
@@ -203,7 +240,7 @@ class _ProfileinformationState extends State<Profileinformation> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-              ),
+              )
             ],
           );
         }),
