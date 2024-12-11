@@ -5,9 +5,10 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:tadakir/Controller/API.dart';
 import 'package:tadakir/Controller/ControllerSharedPrefrances.dart';
+import 'package:tadakir/Exceptions/NotAuthenticatedException.dart';
+import 'package:tadakir/Repository/CartRepository.dart';
 
 class Informationofcommand extends StatefulWidget {
-
   const Informationofcommand({super.key});
 
   @override
@@ -16,7 +17,7 @@ class Informationofcommand extends StatefulWidget {
 
 class _InformationofcommandState extends State<Informationofcommand> {
   final sharedPrefs = ControllerSharedPreferences();
-
+  CartRepository cartRepository = new CartRepository();
   Map<String, dynamic> commandDetail = {};
   late Timer _timer;
   int _remainingSeconds = 600;
@@ -88,7 +89,7 @@ class _InformationofcommandState extends State<Informationofcommand> {
 
   @override
   Widget build(BuildContext context) {
-    double total = double.parse(widget.price) * widget.quantity;
+    double total = 0;
 
     return Scaffold(
       appBar: AppBar(
@@ -155,12 +156,12 @@ class _InformationofcommandState extends State<Informationofcommand> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Event: ${widget.event}",
+                      "Event: ",
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      "Category: ${widget.category}",
+                      "Category:",
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 20),
@@ -197,14 +198,14 @@ class _InformationofcommandState extends State<Informationofcommand> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              "${widget.price} MAD",
+                              " MAD",
                               textAlign: TextAlign.center,
                             ),
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              "${widget.quantity}",
+                              "",
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -315,7 +316,6 @@ class _InformationofcommandState extends State<Informationofcommand> {
                     //       ),
                     //     ],
                     //   ),
-
                   ],
                 ),
               ),
@@ -351,7 +351,11 @@ class _InformationofcommandState extends State<Informationofcommand> {
                     ),
                   ),
                   onPressed: () {
-                    Get.back();
+                    try {
+                      cartRepository.deleteCart();
+                    } on NotAuthenticatedException catch (e) {
+                      // tmxi login
+                    }
                   },
                   child: const Text(
                     "Cancel",

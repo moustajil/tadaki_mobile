@@ -210,7 +210,7 @@ void showDialogForCommand(BuildContext context, String title, String content) {
         actions: [
           TextButton.icon(
             onPressed: () {
-              Get.off(const Informationofcommand();
+              Get.off(const Informationofcommand());
             },
             icon: const Icon(Icons.shopping_cart), // Icon for the "panier"
             label: const Text('Panier'), // Label for the button
