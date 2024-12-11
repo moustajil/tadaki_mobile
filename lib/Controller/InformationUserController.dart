@@ -73,16 +73,17 @@ class Informationusercontroller extends GetxController {
   }
 
   Future<void> updateInformation(
-      BuildContext context,
-      String token,
-      String nom,
-      String prenom,
-      String sex,
-      String birthade,
-      String telephone,
-      String cin,
-      String ville,
-      String email) async {
+    BuildContext context,
+    String token,
+    String nom,
+    String prenom,
+    String sex,
+    String birthdate,
+    String telephone,
+    String cin,
+    String ville,
+    String email,
+  ) async {
     try {
       final response = await http.put(
         Uri.parse('$baseUrl/api/mobile/profile/update'),
@@ -94,7 +95,7 @@ class Informationusercontroller extends GetxController {
           'nom': nom,
           'prenom': prenom,
           'sex': sex,
-          'birthdate': birthade,
+          'birthdate': birthdate,
           'telephone': telephone,
           'cin': cin,
           'ville': ville,
@@ -103,20 +104,73 @@ class Informationusercontroller extends GetxController {
       );
 
       if (response.statusCode == 200) {
-        // Parse the response body and return the list of cities
+        // Parse the response body and handle success
         final Map<String, dynamic> responseBody = jsonDecode(response.body);
-        print("ttttttttttttttttttttt ${responseBody['message']}");
+        print("Response message: ${responseBody['message']}");
+
+        // Show success dialog
+        if (context.mounted) {
+          showDialog(
+            context: context,
+            barrierDismissible:
+                false, // Prevent closing the dialog by tapping outside
+            builder: (BuildContext context) {
+              return AlertDialog(
+                contentPadding: const EdgeInsets.all(20),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                title: const Icon(
+                  Icons.check_circle_outline,
+                  color: Colors.green,
+                  size: 40,
+                ),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text(
+                      'Update Successful!',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      '${responseBody['message']}',
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+
+          // Optionally, you can dismiss the dialog after 1 second
+          Future.delayed(Duration(seconds: 1), () {
+            Navigator.of(context).pop();
+          });
+        }
       } else {
         // Handle HTTP error response
         if (context.mounted) {
           showDialogForResponse(
             context,
             'Error',
-            'Failed to fetch : ${response.statusCode} ---- ${jsonDecode(response.body)}',
+            'Failed to fetch: ${response.statusCode} - ${jsonDecode(response.body)}',
           );
         }
-        print(
-            'Failed to fetch : ${response.statusCode} - ${response.body}   --------- ${jsonDecode(response.body)}');
+        print('Failed to fetch: ${response.statusCode} - ${response.body}');
       }
     } catch (e) {
       print('Error in updateInformation: $e');

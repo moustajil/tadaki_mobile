@@ -50,6 +50,7 @@ class _SplachScreenState extends State<SplachScreen>
         // ignore: use_build_context_synchronously
         checkTokenIfValidOrNot(context, token);
         //getInformationUser(context, token);
+        
       }
     });
   }

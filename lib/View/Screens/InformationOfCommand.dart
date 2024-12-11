@@ -7,18 +7,8 @@ import 'package:tadakir/Controller/API.dart';
 import 'package:tadakir/Controller/ControllerSharedPrefrances.dart';
 
 class Informationofcommand extends StatefulWidget {
-  final String event;
-  final String category;
-  final String price;
-  final int quantity;
 
-  const Informationofcommand({
-    super.key,
-    required this.event,
-    required this.category,
-    required this.price,
-    required this.quantity,
-  });
+  const Informationofcommand({super.key});
 
   @override
   State<Informationofcommand> createState() => _InformationofcommandState();
@@ -27,7 +17,7 @@ class Informationofcommand extends StatefulWidget {
 class _InformationofcommandState extends State<Informationofcommand> {
   final sharedPrefs = ControllerSharedPreferences();
 
-  List<Map<String, dynamic>> commandDetail = [];
+  Map<String, dynamic> commandDetail = {};
   late Timer _timer;
   int _remainingSeconds = 600;
   bool _isEmailSent = false; // To track if the email has been sent.
@@ -82,13 +72,13 @@ class _InformationofcommandState extends State<Informationofcommand> {
 
       // Fetch data using the token
       // ignore: use_build_context_synchronously
-      final responseBody = await Detailevent(context, token);
+      final responseBody = await getCartIfExists(context, token);
 
       // Update state safely
       if (mounted) {
         setState(() {
           commandDetail = responseBody;
-          print(commandDetail);
+          print("===============================${commandDetail}");
         });
       }
     } catch (e) {
@@ -284,46 +274,48 @@ class _InformationofcommandState extends State<Informationofcommand> {
                       ],
                     ),
                     // Content rows (6 rows)
-                    for (int i = 1; i <= commandDetail[0]["tickets"]; i++)
-                      TableRow(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              commandDetail[0]["tickets"][i]["tribune"],
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              commandDetail[0]["tickets"][i]["secteur"],
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              commandDetail[0]["tickets"][i]["range"],
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              commandDetail[0]["tickets"][i]["seige"],
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              commandDetail[0]["tickets"][i]["porte"],
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ],
-                      ),
+                    // for (int i = 1; i <= 11; i++)
+                    //   const TableRow(
+                    //     children: [
+                    //       Padding(
+                    //         padding: const EdgeInsets.all(8.0),
+                    //         child: Text(
+                    //           // commandDetail[0]["tickets"][i]["tribune"],
+                    //           "hello",
+                    //           textAlign: TextAlign.center,
+                    //         ),
+                    //       ),
+                    //       Padding(
+                    //         padding: const EdgeInsets.all(8.0),
+                    //         child: Text(
+                    //           "hello",
+                    //           textAlign: TextAlign.center,
+                    //         ),
+                    //       ),
+                    //       Padding(
+                    //         padding: const EdgeInsets.all(8.0),
+                    //         child: Text(
+                    //           "hello",
+                    //           textAlign: TextAlign.center,
+                    //         ),
+                    //       ),
+                    //       Padding(
+                    //         padding: const EdgeInsets.all(8.0),
+                    //         child: Text(
+                    //           "hello",
+                    //           textAlign: TextAlign.center,
+                    //         ),
+                    //       ),
+                    //       Padding(
+                    //         padding: const EdgeInsets.all(8.0),
+                    //         child: Text(
+                    //           "hello",
+                    //           textAlign: TextAlign.center,
+                    //         ),
+                    //       ),
+                    //     ],
+                    //   ),
+
                   ],
                 ),
               ),

@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:tadakir/Controller/ControllerSharedPrefrances.dart';
 import 'package:tadakir/Controller/EventListPageController.dart';
-import 'package:tadakir/View/Screens/CommandList.dart';
+import 'package:tadakir/View/Screens/HistoricCommadScreen.dart';
 import 'package:tadakir/View/Screens/ProfileInformation.dart';
 import 'package:tadakir/View/Screens/SettingScreen.dart';
 import 'package:tadakir/View/Screens/SingInWithEmail.dart';
@@ -92,7 +92,7 @@ class _EventListPageState extends State<EventListPage> {
               leading: const Icon(Icons.shopping_cart),
               title: const Text('Historic'),
               onTap: () {
-                Get.to(const CommandList());
+                Get.to(const HistoricCommadScreen());
               },
             ),
             ListTile(

@@ -210,11 +210,7 @@ void showDialogForCommand(BuildContext context, String title, String content) {
         actions: [
           TextButton.icon(
             onPressed: () {
-              Get.off(const Informationofcommand(
-                  event: "event",
-                  category: "category",
-                  price: "price",
-                  quantity: 15));
+              Get.off(const Informationofcommand();
             },
             icon: const Icon(Icons.shopping_cart), // Icon for the "panier"
             label: const Text('Panier'), // Label for the button
@@ -252,8 +248,7 @@ Future<void> sendQtOfCommand(
       case 200:
         //final decodedBody = jsonDecode(response.body);
         print("Request successful: ${response.body}");
-        Get.to(Informationofcommand(
-            event: event, category: category, price: price, quantity: qt));
+        Get.to(Informationofcommand());
         break;
 
       case 401:
@@ -279,7 +274,7 @@ Future<void> sendQtOfCommand(
   }
 }
 
-Future<List<Map<String, dynamic>>> Detailevent(
+Future<Map<String, dynamic>> getCartIfExists(
     BuildContext context, String token) async {
   try {
     // Make the HTTP GET request
@@ -292,10 +287,8 @@ Future<List<Map<String, dynamic>>> Detailevent(
     );
     // Check the response status code
     if (response.statusCode == 200) {
-      final List<dynamic> responseBody = jsonDecode(response.body);
-      print("55555555555555555555 Response Body: $responseBody");
-      debugPrint('Response Body: $responseBody');
-      return List<Map<String, dynamic>>.from(responseBody);
+      final dynamic responseBody = jsonDecode(response.body);
+      return Map<String, dynamic>.from(responseBody);
     } else if (response.statusCode == 401) {
       if (context.mounted) {
         showDialogForResponse(context, 'Unauthorized', 'Please log in again.');
@@ -307,7 +300,7 @@ Future<List<Map<String, dynamic>>> Detailevent(
       if (context.mounted) {
         showDialogForResponse(
           context,
-          'Error',
+          'Error 12',
           'Failed: ${errorBody['message'] ?? 'Unknown error'}',
         );
       }
@@ -317,11 +310,11 @@ Future<List<Map<String, dynamic>>> Detailevent(
     if (context.mounted) {
       showDialogForResponse(context, 'Error', 'An error occurred: $e');
     }
-    debugPrint('Error: $e');
+    debugPrint('Error 33: $e');
   }
 
   // Return an empty list in case of an error or failure
-  return [];
+  return {};
 }
 
 Future<Map<String, dynamic>> getInformationUser(
@@ -496,4 +489,3 @@ Future<void> sendEmailForRegistration(
     debugPrint('Error in sendEmailForRegistration: $e');
   }
 }
-

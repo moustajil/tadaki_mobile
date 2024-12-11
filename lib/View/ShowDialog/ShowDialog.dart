@@ -7,7 +7,7 @@ import 'package:tadakir/View/Screens/SingInAndSingOut.dart';
 
 // ignore: non_constant_identifier_names
 void ShowDialogQt(BuildContext context, String categoryColor, String category,
-    String price, String event, int idCategory) {
+  String price, String event, int idCategory) {
   Color color = Color(int.parse(categoryColor.replaceAll('#', '0xFF')));
   int quantity = 1; // Initialize quantity
   double unitPrice = double.parse(price); // Parse the price as double
