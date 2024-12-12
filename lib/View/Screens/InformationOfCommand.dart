@@ -15,7 +15,7 @@ class _InformationofcommandState extends State<Informationofcommand> {
   Map<String, dynamic> commandDetail = {};
   late Timer _timer;
   int _remainingSeconds = 600;
-  bool _isEmailSent = false; // To track if the email has been sent.
+  bool _isEmailSent = false;
 
   @override
   void initState() {
@@ -82,7 +82,8 @@ class _InformationofcommandState extends State<Informationofcommand> {
 
   @override
   Widget build(BuildContext context) {
-    double total = 0;
+    int total = commandDetail["amount"];
+    double priceOfTicket = total / commandDetail["tickets"].length;
 
     return Scaffold(
       appBar: AppBar(
@@ -158,146 +159,149 @@ class _InformationofcommandState extends State<Informationofcommand> {
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     Table(
-                      defaultColumnWidth: const IntrinsicColumnWidth(),
-                      border: TableBorder.all(color: Colors.black),
-                      children: const [
-                        TableRow(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Text(
-                                "Price",
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                                textAlign: TextAlign.center,
-                              ),
+                      border: TableBorder.all(color: Colors.grey.shade300),
+                      children: [
+                        const TableRow(children: [
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text(
+                              "Price",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.center,
                             ),
-                            Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Text(
-                                "Quantity",
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                                textAlign: TextAlign.center,
-                              ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text(
+                              "Quantity",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.center,
                             ),
-                            Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Text(
-                                "Total",
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                                textAlign: TextAlign.center,
-                              ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text(
+                              "Total",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.center,
                             ),
-                          ],
-                        ),
-                        TableRow(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Text(
-                                ,
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                                textAlign: TextAlign.center,
-                              ),
+                          ),
+                        ]),
+                        TableRow(children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "$priceOfTicket MAD",
+                              textAlign: TextAlign.center,
                             ),
-                            Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Text(
-                                "Quantity",
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                                textAlign: TextAlign.center,
-                              ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "${commandDetail["tickets"].length}",
+                              textAlign: TextAlign.center,
                             ),
-                            Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Text(
-                                "Total",
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                                textAlign: TextAlign.center,
-                              ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "$total MAD",
+                              textAlign: TextAlign.center,
                             ),
-                          ],
-                        ),
+                          ),
+                        ]),
                       ],
                     ),
                     const SizedBox(height: 20),
-                    Table(
-                      defaultColumnWidth: const IntrinsicColumnWidth(),
-                      border: TableBorder.all(color: Colors.black),
-                      children: [
-                        TableRow(
-                          decoration: BoxDecoration(color: Colors.grey[300]),
-                          children: const [
-                            Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Text(
-                                "Secteur",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Text(
-                                "Range",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Text(
-                                "Seige",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Text(
-                                "Porte",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ],
-                        ),
-                        if (commandDetail != null &&
-                            commandDetail["tickets"] != null)
-                          ...commandDetail["tickets"].map<TableRow>((ticket) {
-                            return TableRow(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    ticket["secteur"] ?? "N/A",
-                                    textAlign: TextAlign.center,
-                                  ),
+                    SizedBox(
+                      width: double.infinity,
+                      child: Table(
+                        defaultColumnWidth: const IntrinsicColumnWidth(),
+                        border: TableBorder.all(color: Colors.grey.shade300),
+                        children: [
+                          const TableRow(
+                            decoration: BoxDecoration(color: Colors.red),
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  "Secteur",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    ticket["range"] ?? "N/A",
-                                    textAlign: TextAlign.center,
-                                  ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  "Range",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    ticket["seige"] ?? "N/A",
-                                    textAlign: TextAlign.center,
-                                  ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  "Seige",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    ticket["porte"] ?? "N/A",
-                                    textAlign: TextAlign.center,
-                                  ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  "Porte",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
                                 ),
-                              ],
-                            );
-                          }).toList(),
-                      ],
+                              ),
+                            ],
+                          ),
+                          if (commandDetail != null &&
+                              commandDetail["tickets"] != null)
+                            ...commandDetail["tickets"].map<TableRow>((ticket) {
+                              return TableRow(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      ticket["secteur"] ?? "N/A",
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      ticket["range"] ?? "N/A",
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      ticket["seige"] ?? "N/A",
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      ticket["porte"] ?? "N/A",
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }).toList(),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -310,7 +314,7 @@ class _InformationofcommandState extends State<Informationofcommand> {
                     backgroundColor: Colors.red,
                     padding: const EdgeInsets.symmetric(vertical: 15),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(11),
                     ),
                   ),
                   onPressed: () {
@@ -330,7 +334,7 @@ class _InformationofcommandState extends State<Informationofcommand> {
                     backgroundColor: Colors.red.shade100,
                     padding: const EdgeInsets.symmetric(vertical: 15),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(11),
                     ),
                   ),
                   onPressed: () async {
@@ -341,6 +345,7 @@ class _InformationofcommandState extends State<Informationofcommand> {
                       print("Token is null or empty");
                       return;
                     }
+                    // ignore: use_build_context_synchronously
                     deletOrder(context, token);
                   },
                   child: const Text(

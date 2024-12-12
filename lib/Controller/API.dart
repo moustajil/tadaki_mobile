@@ -200,20 +200,39 @@ Future<List<Map<String, dynamic>>> getCategoryOfEvenement(
   return [];
 }
 
-void showDialogForCommand(BuildContext context, String title, String content) {
+void showDialogForCommand(
+    BuildContext context, String? title, String? content) {
+  // Ensure that neither title nor content is null.
+  if (title == null || content == null) {
+    debugPrint('Error: Title or content is null.');
+    return;
+  }
+
+  // Ensure context is mounted before showing the dialog.
+  if (!context.mounted) return;
+
   showDialog(
     context: context,
+    barrierDismissible: false, // Prevent dismissal by tapping outside.
     builder: (BuildContext dialogContext) {
       return AlertDialog(
-        title: Text(title),
-        content: Text(content),
+        title: Text(
+          title,
+          style:
+              const TextStyle(fontWeight: FontWeight.bold), // Optional styling.
+        ),
+        content: Text(
+          content,
+          style: const TextStyle(fontSize: 16), // Optional content styling.
+        ),
         actions: [
           TextButton.icon(
             onPressed: () {
-              Get.off(const Informationofcommand());
+              Get.off(() =>
+                  const Informationofcommand()); // Ensure proper navigation.
             },
-            icon: const Icon(Icons.shopping_cart), // Icon for the "panier"
-            label: const Text('Panier'), // Label for the button
+            icon: const Icon(Icons.shopping_cart), // Icon for the "panier".
+            label: const Text('Panier'), // Label for the button.
           ),
         ],
       );
@@ -222,14 +241,29 @@ void showDialogForCommand(BuildContext context, String title, String content) {
 }
 
 Future<void> sendQtOfCommand(
-    BuildContext context,
-    String event,
-    String category,
-    String token,
-    String idCategory,
-    int qt,
-    String price) async {
+  BuildContext context,
+  String event,
+  String category,
+  String token,
+  String idCategory,
+  int? qt,
+  String price,
+) async {
   if (!context.mounted) return; // Early return if context is not mounted.
+
+  // Check for null values.
+  if ([event, category, token, idCategory, price].contains(null) ||
+      qt == null) {
+    debugPrint('One or more required parameters are null.');
+    if (context.mounted) {
+      showDialogForResponse(
+        context,
+        'Error',
+        'Invalid input: Please ensure all fields are filled.',
+      );
+    }
+    return;
+  }
 
   try {
     final response = await http.post(
@@ -246,21 +280,21 @@ Future<void> sendQtOfCommand(
 
     switch (response.statusCode) {
       case 200:
-        //final decodedBody = jsonDecode(response.body);
         print("Request successful: ${response.body}");
         Get.to(Informationofcommand());
         break;
 
       case 401:
-        // Navigate to Sign In page using GetX if unauthorized.
-        print("Request successful: ${response.body}");
+        print("Unauthorized: ${response.body}");
         Get.offAll(() => const SignInWithEmail());
         break;
 
       default:
-        // Handle other status codes gracefully.
         showDialogForCommand(
-            context, "You have already command", "Please go to the command");
+          context,
+          "You have already command",
+          "Please go to the command",
+        );
     }
   } catch (e) {
     if (context.mounted) {
@@ -503,6 +537,7 @@ Future<void> deletOrder(BuildContext context, String token) async {
     // Handle response
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseBody = jsonDecode(response.body);
+      Get.back();
       print('Response Body: $responseBody');
     } else if (response.statusCode == 401) {
       if (context.mounted) {
