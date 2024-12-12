@@ -157,6 +157,68 @@ class _InformationofcommandState extends State<Informationofcommand> {
                       "Category: ${commandDetail["categorieNomFr"]}",
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
+                    Table(
+                      defaultColumnWidth: const IntrinsicColumnWidth(),
+                      border: TableBorder.all(color: Colors.black),
+                      children: const [
+                        TableRow(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(
+                                "Price",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(
+                                "Quantity",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(
+                                "Total",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ],
+                        ),
+                        TableRow(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(
+                                ,
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(
+                                "Quantity",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(
+                                "Total",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                     const SizedBox(height: 20),
                     Table(
                       defaultColumnWidth: const IntrinsicColumnWidth(),
@@ -165,14 +227,6 @@ class _InformationofcommandState extends State<Informationofcommand> {
                         TableRow(
                           decoration: BoxDecoration(color: Colors.grey[300]),
                           children: const [
-                            // Padding(
-                            //   padding: EdgeInsets.all(8.0),
-                            //   child: Text(
-                            //     "Tribune",
-                            //     textAlign: TextAlign.center,
-                            //     style: TextStyle(fontWeight: FontWeight.bold),
-                            //   ),
-                            // ),
                             Padding(
                               padding: EdgeInsets.all(8.0),
                               child: Text(
@@ -212,13 +266,6 @@ class _InformationofcommandState extends State<Informationofcommand> {
                           ...commandDetail["tickets"].map<TableRow>((ticket) {
                             return TableRow(
                               children: [
-                                // Padding(
-                                //   padding: const EdgeInsets.all(8.0),
-                                //   child: Text(
-                                //     ticket["tribune"] ?? "N/A",
-                                //     textAlign: TextAlign.center,
-                                //   ),
-                                // ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
