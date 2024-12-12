@@ -152,6 +152,7 @@ void ShowDialogQt(
                             if (kDebugMode) {
                               print("The event name is: $event");
                             }
+                            // Navigator.pop(context);
                           } catch (e) {
                             debugPrint("Error during API call: $e");
                             if (context.mounted) {
@@ -354,7 +355,7 @@ void showDialogForCancelOrder(BuildContext context, String token) {
           children: [
             // Cancel button (NO)
             SizedBox(
-              width: 120, // Set a fixed width for the buttons
+              width: 110, // Set a fixed width for the buttons
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -381,7 +382,7 @@ void showDialogForCancelOrder(BuildContext context, String token) {
 
             // Confirm button (Yes)
             SizedBox(
-              width: 120, // Set a fixed width for the buttons
+              width: 110, // Set a fixed width for the buttons
               child: ElevatedButton(
                 onPressed: () async {
                   try {
@@ -410,7 +411,7 @@ void showDialogForCancelOrder(BuildContext context, String token) {
                       double.infinity, 40), // Ensure buttons have same height
                 ),
                 child: const Text(
-                  'Yes, Delete',
+                  'Delete',
                   style: TextStyle(
                     color: Colors.white, // White text for "Yes"
                     fontWeight: FontWeight.bold,

@@ -57,7 +57,6 @@ Future<void> sendEmail(BuildContext context, String email) async {
       Get.to(const OtpVerification());
     } else {
       showDialog(
-        // ignore: use_build_context_synchronously
         context: context,
         builder: (_) => AlertDialog(
           title: const Text('Errore'),
@@ -76,7 +75,6 @@ Future<void> sendEmail(BuildContext context, String email) async {
     }
   } catch (e) {
     showDialog(
-      // ignore: use_build_context_synchronously
       context: context,
       builder: (_) => AlertDialog(
         title: const Text('Error'),
@@ -283,7 +281,7 @@ Future<void> sendQtOfCommand(
     switch (response.statusCode) {
       case 200:
         print("Request successful: ${response.body}");
-        Get.to(Informationofcommand());
+        Get.to(const Informationofcommand());
         break;
 
       case 401:
@@ -525,54 +523,12 @@ Future<void> sendEmailForRegistration(
   }
 }
 
-// Future<void> deletOrder(BuildContext context, String token) async {
-//   try {
-//     final response = await http.delete(
-//       Uri.parse('$baseUrl/api/mobile/order/cart'),
-//       headers: {
-//         'Content-Type': 'application/json',
-//         'Authorization': 'Bearer $token',
-//       },
-//     );
-
-//     // Handle response
-//     if (response.statusCode == 200) {
-//       final Map<String, dynamic> responseBody = jsonDecode(response.body);
-//       print(
-//           'Response Body: ---------------------------------------------------  $responseBody');
-//       Get.back();
-//       //
-//     } else if (response.statusCode == 401) {
-//       if (context.mounted) {
-//         showDialogForResponse(context, 'Unauthorized', 'Please log in again.');
-//         Get.offAll(() => const SinginandSingout());
-//       }
-//     } else {
-//       // Handle other error responses
-//       final errorBody = jsonDecode(response.body);
-//       if (context.mounted) {
-//         showDialogForResponse(
-//           context,
-//           'Error',
-//           'Failed: ${errorBody['message'] ?? 'Unknown error'}',
-//         );
-//       }
-//     }
-//   } catch (e) {
-//     // Handle exceptions
-//     if (context.mounted) {
-//       showDialogForResponse(context, 'Error', 'An error occurred: $e');
-//     }
-//     debugPrint('Error: $e');
-//   }
-// }
-
 Future<void> deletOrder(BuildContext context, String token) async {
   try {
     // Show loading indicator
     showDialog(
         context: context,
-        builder: (_) => Center(child: CircularProgressIndicator()));
+        builder: (_) => const Center(child: CircularProgressIndicator()));
 
     final response = await http.delete(
       Uri.parse('$baseUrl/api/mobile/order/cart'),
