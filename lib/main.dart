@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'package:tadakir/View/Screens/SplachScreen.dart';
 
 void main() {
@@ -15,6 +16,9 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return const SplachScreen();
+    return const GetMaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: SplachScreen(),
+    );
   }
 }

@@ -489,3 +489,42 @@ Future<void> sendEmailForRegistration(
     debugPrint('Error in sendEmailForRegistration: $e');
   }
 }
+
+Future<void> deletOrder(BuildContext context, String token) async {
+  try {
+    final response = await http.delete(
+      Uri.parse('$baseUrl/api/mobile/order/cart'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    // Handle response
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseBody = jsonDecode(response.body);
+      print('Response Body: $responseBody');
+    } else if (response.statusCode == 401) {
+      if (context.mounted) {
+        showDialogForResponse(context, 'Unauthorized', 'Please log in again.');
+        Get.offAll(() => const SinginandSingout());
+      }
+    } else {
+      // Handle other error responses
+      final errorBody = jsonDecode(response.body);
+      if (context.mounted) {
+        showDialogForResponse(
+          context,
+          'Error',
+          'Failed: ${errorBody['message'] ?? 'Unknown error'}',
+        );
+      }
+    }
+  } catch (e) {
+    // Handle exceptions
+    if (context.mounted) {
+      showDialogForResponse(context, 'Error', 'An error occurred: $e');
+    }
+    debugPrint('Error: $e');
+  }
+}

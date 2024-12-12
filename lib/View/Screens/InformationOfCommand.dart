@@ -20,9 +20,8 @@ class _InformationofcommandState extends State<Informationofcommand> {
   @override
   void initState() {
     super.initState();
-
-    _startCountdown();
     _fetchDetailCommand();
+    _startCountdown();
   }
 
   void _startCountdown() {
@@ -150,166 +149,109 @@ class _InformationofcommandState extends State<Informationofcommand> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Event: ",
+                      "Event:  ${commandDetail[""]}",
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      "Category:",
+                      "Category: ${commandDetail["categorieNomFr"]}",
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 20),
                     Table(
-                      border: TableBorder.all(color: Colors.grey.shade300),
+                      defaultColumnWidth: const IntrinsicColumnWidth(),
+                      border: TableBorder.all(color: Colors.black),
                       children: [
-                        const TableRow(children: [
-                          Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              "Price",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.center,
+                        TableRow(
+                          decoration: BoxDecoration(color: Colors.grey[300]),
+                          children: const [
+                            // Padding(
+                            //   padding: EdgeInsets.all(8.0),
+                            //   child: Text(
+                            //     "Tribune",
+                            //     textAlign: TextAlign.center,
+                            //     style: TextStyle(fontWeight: FontWeight.bold),
+                            //   ),
+                            // ),
+                            Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(
+                                "Secteur",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
                             ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              "Quantity",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.center,
+                            Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(
+                                "Range",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
                             ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              "Total",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.center,
+                            Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(
+                                "Seige",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
                             ),
-                          ),
-                        ]),
-                        TableRow(children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              " MAD",
-                              textAlign: TextAlign.center,
+                            Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(
+                                "Porte",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "",
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "$total MAD",
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ]),
+                          ],
+                        ),
+                        if (commandDetail != null &&
+                            commandDetail["tickets"] != null)
+                          ...commandDetail["tickets"].map<TableRow>((ticket) {
+                            return TableRow(
+                              children: [
+                                // Padding(
+                                //   padding: const EdgeInsets.all(8.0),
+                                //   child: Text(
+                                //     ticket["tribune"] ?? "N/A",
+                                //     textAlign: TextAlign.center,
+                                //   ),
+                                // ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    ticket["secteur"] ?? "N/A",
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    ticket["range"] ?? "N/A",
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    ticket["seige"] ?? "N/A",
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    ticket["porte"] ?? "N/A",
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ],
+                            );
+                          }).toList(),
                       ],
                     ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-              Container(
-                padding: const EdgeInsets.all(12.0),
-                child: Table(
-                  border: TableBorder.all(), // Adds a border to the table
-                  children: [
-                    // Header row
-                    TableRow(
-                      decoration: BoxDecoration(color: Colors.grey[300]),
-                      children: const [
-                        Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            "Tribune",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            "Secteur",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            "Range",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            "Seige",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            "Porte",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ],
-                    ),
-                    // Content rows (6 rows)
-                    for (int i = 1; i <= commandDetail.length; i++)
-                      const TableRow(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              // commandDetail[0]["tickets"][i]["tribune"],
-                              "hello",
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "hello",
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "hello",
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "hello",
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "hello",
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ],
-                      ),
                   ],
                 ),
               ),
@@ -344,12 +286,15 @@ class _InformationofcommandState extends State<Informationofcommand> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  onPressed: () {
-                    // try {
-                    //   cartRepository.deleteCart();
-                    // } on NotAuthenticatedException catch (e) {
-                    //   // tmxi login
-                    // }
+                  onPressed: () async {
+                    String? token = await sharedPrefs.getToken();
+
+                    // Ensure token is valid
+                    if (token == null || token.isEmpty) {
+                      print("Token is null or empty");
+                      return;
+                    }
+                    deletOrder(context, token);
                   },
                   child: const Text(
                     "Cancel",
