@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:tadakir/Controller/API.dart';
 import 'package:tadakir/Controller/ControllerSharedPrefrances.dart';
+import 'package:tadakir/View/ShowDialog/ShowDialog.dart';
 
 class Informationofcommand extends StatefulWidget {
   const Informationofcommand({super.key});
@@ -141,9 +142,7 @@ class _InformationofcommandState extends State<Informationofcommand> {
               ),
               const SizedBox(height: 15),
               Container(
-                padding: const EdgeInsets.all(15),
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey.shade300),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Column(
@@ -157,6 +156,9 @@ class _InformationofcommandState extends State<Informationofcommand> {
                     Text(
                       "Category: ${commandDetail["categorieNomFr"]}",
                       style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 15,
                     ),
                     Table(
                       border: TableBorder.all(color: Colors.grey.shade300),
@@ -264,8 +266,7 @@ class _InformationofcommandState extends State<Informationofcommand> {
                               ),
                             ],
                           ),
-                          if (commandDetail != null &&
-                              commandDetail["tickets"] != null)
+                          if (commandDetail["tickets"] != null)
                             ...commandDetail["tickets"].map<TableRow>((ticket) {
                               return TableRow(
                                 children: [
@@ -286,7 +287,7 @@ class _InformationofcommandState extends State<Informationofcommand> {
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Text(
-                                      ticket["seige"] ?? "N/A",
+                                      ticket["siege"] ?? "N/A",
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
@@ -346,7 +347,8 @@ class _InformationofcommandState extends State<Informationofcommand> {
                       return;
                     }
                     // ignore: use_build_context_synchronously
-                    deletOrder(context, token);
+                    //deletOrder(context, token);
+                    showDialogForCancelOrder(context, token);
                   },
                   child: const Text(
                     "Cancel",

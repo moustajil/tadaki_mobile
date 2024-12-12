@@ -36,7 +36,7 @@ class _SignInWithEmailState extends State<SignInWithEmail> {
                   'assets/images/logo-default.webp',
                   width: 180,
                 ),
-                const SizedBox(height: 110),
+                const SizedBox(height: 80),
 
                 // Title Section
                 Align(

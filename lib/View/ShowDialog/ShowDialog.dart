@@ -140,6 +140,7 @@ void ShowDialogQt(
                                   "Authentication token is missing.");
                             }
                             await sendQtOfCommand(
+                              // ignore: use_build_context_synchronously
                               context,
                               event,
                               category,
@@ -314,6 +315,110 @@ void showDialogForResponse(BuildContext context, String title, String content) {
             Navigator.of(context).pop();
           },
           child: const Text('OK'),
+        ),
+      ],
+    ),
+  );
+}
+
+void showDialogForCancelOrder(BuildContext context, String token) {
+  showDialog(
+    context: context,
+    builder: (_) => AlertDialog(
+      backgroundColor: Colors.white, // Background color for the alert dialog
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12), // Rounded corners
+      ),
+      title: const Text(
+        "Confirm Order Deletion",
+        style: TextStyle(
+          fontSize: 18, // Title font size
+          fontWeight: FontWeight.bold,
+          color: Colors.redAccent, // Color for the title
+        ),
+      ),
+      content: const Padding(
+        padding: EdgeInsets.only(top: 8.0),
+        child: Text(
+          "Are you sure you want to delete this order? This action cannot be undone.",
+          style: TextStyle(
+            fontSize: 16, // Content font size
+            color: Colors.black87, // Content text color
+          ),
+        ),
+      ),
+      actions: [
+        // Wrap buttons in a Row to ensure equal spacing
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            // Cancel button (NO)
+            SizedBox(
+              width: 120, // Set a fixed width for the buttons
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor:
+                      Colors.white, // White background for the "No" button
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8), // Rounded corners
+                  ),
+                  minimumSize: const Size(
+                      double.infinity, 40), // Ensure buttons have same height
+                ),
+                child: const Text(
+                  'No',
+                  style: TextStyle(
+                    color: Color.fromARGB(
+                        255, 155, 150, 150), // Gray text for "No"
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+
+            // Confirm button (Yes)
+            SizedBox(
+              width: 120, // Set a fixed width for the buttons
+              child: ElevatedButton(
+                onPressed: () async {
+                  try {
+                    // Call the deletOrder function and wait for it to finish
+                    await deletOrder(context, token);
+
+                    // After successful deletion, pop the current screen
+                    Get.back();
+                  } catch (e) {
+                    // Handle the error, if any, that occurred during the deletion process
+                    print("Error: $e");
+                    // Optionally, you can show a dialog or Snackbar for the error
+                    if (context.mounted) {
+                      showDialogForResponse(
+                          context, 'Error', 'An error occurred: $e');
+                    }
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor:
+                      Colors.redAccent, // Red background for the "Yes" button
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8), // Rounded corners
+                  ),
+                  minimumSize: const Size(
+                      double.infinity, 40), // Ensure buttons have same height
+                ),
+                child: const Text(
+                  'Yes, Delete',
+                  style: TextStyle(
+                    color: Colors.white, // White text for "Yes"
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            )
+          ],
         ),
       ],
     ),

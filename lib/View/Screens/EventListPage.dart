@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:tadakir/Controller/API.dart';
 import 'package:tadakir/Controller/ControllerSharedPrefrances.dart';
 import 'package:tadakir/Controller/EventListPageController.dart';
 import 'package:tadakir/View/Screens/HistoricCommadScreen.dart';
@@ -22,11 +23,38 @@ class _EventListPageState extends State<EventListPage> {
 
   // Add a GlobalKey for ScaffoldState
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  Map<String, dynamic> infoUser = {};
+  bool isLoading = true; // Flag to check if user info is still loading
 
   @override
   void initState() {
     super.initState();
+    _initializeData();
     eventListController.fetchEvents(context);
+  }
+
+  Future<void> _initializeData() async {
+    try {
+      String? token = await sharedPrefs.getToken();
+      if (token == null || token.isEmpty) {
+        throw Exception("User token is null or empty.");
+      }
+
+      // ignore: use_build_context_synchronously
+      infoUser = await getInformationUser(context, token);
+      setState(() {
+        isLoading = false; // Set loading to false after data is fetched
+      });
+
+      // ignore: use_build_context_synchronously
+      eventListController.fetchEvents(context);
+    } catch (e) {
+      // Handle errors or show a message
+      print("Error initializing data: $e");
+      setState(() {
+        isLoading = false; // Set loading to false in case of error
+      });
+    }
   }
 
   @override
@@ -71,8 +99,51 @@ class _EventListPageState extends State<EventListPage> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
+            DrawerHeader(
+              decoration: const BoxDecoration(
+                color: Color.fromARGB(255, 211, 49, 58),
+              ),
+              child: isLoading
+                  ? const Center(
+                      child:
+                          CircularProgressIndicator()) // Show loading indicator while data is being fetched
+                  : infoUser.isEmpty
+                      ? const Center(
+                          child: Text(
+                              "User Info not available")) // Show a message if infoUser is empty
+                      : Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CircleAvatar(
+                              radius: 40.0,
+
+                              backgroundColor:
+                                  const Color.fromARGB(255, 170, 164, 164),
+                              child: Text(
+                                "${infoUser["nom"][0].substring(0, 1).toUpperCase() ?? 'User'}",
+                                style: const TextStyle(
+                                    fontSize: 30,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ), // Show default text if "nom" is null
+                            ),
+                            Text(
+                              "${infoUser["nom"] ?? 'No Name'} ${infoUser["prenom"] ?? ''}",
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              "${infoUser["email"] ?? 'No Email'}",
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ],
+                        ),
+            ),
+            //
             const SizedBox(
-              height: 50,
+              height: 10,
             ),
             ListTile(
               leading: const Icon(Icons.home),

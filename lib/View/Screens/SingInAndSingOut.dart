@@ -37,7 +37,7 @@ class _SinginandsingoutState extends State<SinginandSingout> {
                         color: Color.fromARGB(255, 255, 255, 255)),
                     dropdownColor: const Color.fromARGB(255, 211, 49, 58),
                     underline: Container(),
-                    items: ["English", "Français", "Arab"]
+                    items: ["English", "Français"]
                         .map(
                           (language) => DropdownMenuItem<String>(
                             value: language,

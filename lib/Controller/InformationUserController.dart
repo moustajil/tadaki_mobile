@@ -20,14 +20,12 @@ class Informationusercontroller extends GetxController {
       }
 
       // Fetch user information
+      // ignore: use_build_context_synchronously
       final responseBody = await getInformationUser(context, token);
-      if (responseBody != null) {
-        infoUser.value = responseBody;
-      } else {
-        throw Exception("Failed to fetch user info.");
-      }
-
+      infoUser.value = responseBody;
+    
       // Fetch cities and update the state
+      // ignore: use_build_context_synchronously
       List<Map<String, dynamic>> cityList = await getAllCities(context, token);
       villes.value = cityList; // Update villes after fetching cities
     } catch (e) {
@@ -157,7 +155,8 @@ class Informationusercontroller extends GetxController {
           );
 
           // Optionally, you can dismiss the dialog after 1 second
-          Future.delayed(Duration(seconds: 1), () {
+          Future.delayed(const Duration(seconds: 1), () {
+            // ignore: use_build_context_synchronously
             Navigator.of(context).pop();
           });
         }
