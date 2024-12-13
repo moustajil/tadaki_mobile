@@ -49,7 +49,6 @@ class Eventlistpagecontroller extends GetxController {
           padding: const EdgeInsets.all(16),
           child: Column(
             children: [
-              // Logos and Names
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

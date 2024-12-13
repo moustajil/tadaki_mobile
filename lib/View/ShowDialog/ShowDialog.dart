@@ -408,7 +408,7 @@ void showDialogForCancelOrder(BuildContext context, String token) {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color.fromARGB(
+                  backgroundColor: const Color.fromARGB(
                       255, 211, 49, 58), // Red background for the "Yes" button
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8), // Rounded corners

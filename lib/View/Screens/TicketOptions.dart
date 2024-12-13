@@ -275,6 +275,7 @@ class _TicketOptionsState extends State<TicketOptions> {
 
   // ignore: non_constant_identifier_names
 
+  // ignore: non_constant_identifier_names
   Widget QtCategory(String qtTickts, BuildContext context, String ColorCategory,
       String category, String price, String event, int id) {
     // Parse quantity with error handling
@@ -283,7 +284,8 @@ class _TicketOptionsState extends State<TicketOptions> {
       return const Center(
         child: Text(
           "Invalid quantity",
-          style: TextStyle(color: Color.fromARGB(255, 211, 49, 58), fontSize: 12),
+          style:
+              TextStyle(color: Color.fromARGB(255, 211, 49, 58), fontSize: 12),
         ),
       );
     }
@@ -332,7 +334,7 @@ class _TicketOptionsState extends State<TicketOptions> {
           width: 90,
           height: 30,
           decoration: BoxDecoration(
-            color:const Color.fromARGB(255, 211, 49, 58),
+            color: const Color.fromARGB(255, 211, 49, 58),
             borderRadius: BorderRadius.circular(6),
           ),
           child: const Center(

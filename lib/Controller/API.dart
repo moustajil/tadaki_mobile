@@ -364,9 +364,8 @@ Future<void> sendEmailForRegistration(
 
     if (response.statusCode == 200) {
       if (responseBody is Map<String, dynamic>) {
-        // ignore: unused_local_variable
         final message = responseBody["message"] ?? "OTP sent successfully.";
-        //showDialogForResponse(context, 'Success', message);
+        print(message);
       } else {
         showDialogForResponse(context, 'Success', "OTP sent successfully.");
       }
