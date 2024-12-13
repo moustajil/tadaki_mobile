@@ -16,6 +16,7 @@ class Informationofcommand extends StatefulWidget {
 class _InformationofcommandState extends State<Informationofcommand> {
   final sharedPrefs = ControllerSharedPreferences();
   final otpVerificationController = Get.put(Otpverificationcontroller());
+
   Map<String, dynamic>? commandDetail = {
     "id": 0,
     "createdAt": "",
