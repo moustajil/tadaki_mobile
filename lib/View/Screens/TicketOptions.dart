@@ -332,7 +332,7 @@ class _TicketOptionsState extends State<TicketOptions> {
           width: 90,
           height: 30,
           decoration: BoxDecoration(
-            color: Color.fromARGB(255, 211, 49, 58),
+            color:const Color.fromARGB(255, 211, 49, 58),
             borderRadius: BorderRadius.circular(6),
           ),
           child: const Center(

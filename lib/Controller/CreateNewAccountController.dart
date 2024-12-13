@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tadakir/Controller/API.dart';
 import 'package:tadakir/Controller/ControllerSharedPrefrances.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:tadakir/View/Screens/EventListPage.dart';
 
 class CreateNewAccountController extends GetxController {
   final sharedPrefers = ControllerSharedPreferences();
@@ -165,5 +167,93 @@ class CreateNewAccountController extends GetxController {
         ],
       ),
     );
+  }
+
+  Future<void> createNewAccount(
+    BuildContext context,
+    String firstName,
+    String secondName,
+    String sex,
+    String dateOfBirth,
+    String phone,
+    String cin,
+    String city,
+    String email,
+    String otp,
+    int cgv,
+    int cndp,
+  ) async {
+    const String endpoint = '/api/mobile/auth/register';
+    try {
+      // Show a loading dialog
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => const Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+      // Create the payload for the POST request
+      final Map<String, dynamic> payload = {
+        'nom': firstName,
+        'prenom': secondName,
+        'sex': sex,
+        'birthdate': dateOfBirth,
+        'telephone': phone,
+        'cin': cin,
+        'ville': city,
+        'email': email,
+        'otp': otp,
+        'cgv': cgv,
+        'cndp': cndp,
+      };
+
+      // Send the POST request
+      final http.Response response = await http.post(
+        Uri.parse('$baseUrl$endpoint'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(payload),
+      );
+
+      // Close the loading dialog
+      if (context.mounted) Navigator.of(context).pop();
+
+      if (response.statusCode == 200) {
+        // Decode the response
+        final Map<String, dynamic> responseData = jsonDecode(response.body);
+
+        // // Show success message
+        Get.snackbar(
+          'Success',
+          responseData['message'] ?? 'Account created successfully!',
+          snackPosition: SnackPosition.BOTTOM,
+        );
+
+        // Navigate to the OTP verification page
+        print(
+            "------------------------------------${sharedPrefers.getToken()}");
+        Get.to(const EventListPage());
+      } else {
+        // Decode and handle the error response
+        final Map<String, dynamic> errorData = jsonDecode(response.body);
+        Get.snackbar(
+          'Error',
+          "${errorData['message']}----------------",
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      }
+    } catch (e) {
+      // Close the loading dialog in case of an exception
+      if (context.mounted) Navigator.of(context).pop();
+
+      // Log and show the exception
+      // ignore: avoid_print
+      print("Error during account creation: $e");
+      Get.snackbar(
+        'Error',
+        'Failed to connect: $e',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
   }
 }

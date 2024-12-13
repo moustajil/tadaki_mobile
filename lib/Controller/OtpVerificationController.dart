@@ -29,7 +29,7 @@ class Otpverificationcontroller extends GetxController {
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              backgroundColor: Colors.red,
+              backgroundColor: const Color.fromARGB(255, 211, 49, 58),
               content: Text('No email found. Please try again.'),
             ),
           );
@@ -39,7 +39,7 @@ class Otpverificationcontroller extends GetxController {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            backgroundColor: Colors.red,
+            backgroundColor: const Color.fromARGB(255, 211, 49, 58),
             content: Text('Please enter a valid 6-digit OTP'),
           ),
         );
@@ -138,7 +138,6 @@ class Otpverificationcontroller extends GetxController {
     }
   }
 
-
   void showResendOtpDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -150,14 +149,20 @@ class Otpverificationcontroller extends GetxController {
               const Text('The OTP has expired. Would you like to resend it?'),
           actions: [
             TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: const Text('No'),
+            ),
+            TextButton(
               onPressed: () async {
                 Navigator.of(context).pop(); // Close the dialog
 
                 try {
-                  final email =
-                      await ctrPrefs.getEmail(); // Await the Future
+                  final email = await ctrPrefs.getEmail(); // Await the Future
                   if (email != null && email.isNotEmpty) {
                     remainingSeconds.value = 60; // Reset the countdown
+                    // ignore: use_build_context_synchronously
                     startCountdown(context); // Restart the countdown
                     // ignore: use_build_context_synchronously
                     await sendEmail(context, email); // Resend the OTP
@@ -181,13 +186,10 @@ class Otpverificationcontroller extends GetxController {
                   );
                 }
               },
-              child: const Text('Yes'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
-              child: const Text('No'),
+              child: const Text(
+                'Yes',
+                style: TextStyle(color: Color.fromARGB(255, 211, 49, 58)),
+              ),
             ),
           ],
         );
@@ -195,11 +197,10 @@ class Otpverificationcontroller extends GetxController {
     );
   }
 
-
   void startCountdown(BuildContext context) {
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (remainingSeconds > 0) {
-          remainingSeconds.value--;
+        remainingSeconds.value--;
       } else {
         timer.cancel(); // Stop the countdown
         showResendOtpDialog(context); // Show the dialog to ask for OTP resend
@@ -208,23 +209,40 @@ class Otpverificationcontroller extends GetxController {
   }
 
   Future<void> sendEmail(BuildContext context, String email) async {
-  try {
-    final response = await http.post(
-      Uri.parse('$baseUrl/api/mobile/auth/login/sendotp'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'email': email}),
-    );
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/api/mobile/auth/login/sendotp'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'email': email}),
+      );
 
-    if (response.statusCode == 200) {
-      ctrPrefs.saveEmail(email);
-      Get.to(const OtpVerification());
-    } else {
+      if (response.statusCode == 200) {
+        ctrPrefs.saveEmail(email);
+        Get.to(const OtpVerification());
+      } else {
+        showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+            title: const Text('Errore'),
+            // content: Text(jsonDecode(response.body)["message"]),
+            content: const Text("Email not found"),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
+    } catch (e) {
       showDialog(
         context: context,
         builder: (_) => AlertDialog(
-          title: const Text('Errore'),
-          // content: Text(jsonDecode(response.body)["message"]),
-          content: const Text("Email not found"),
+          title: const Text('Error'),
+          content: Text('An error occurred: $e'),
           actions: [
             TextButton(
               onPressed: () {
@@ -236,23 +254,5 @@ class Otpverificationcontroller extends GetxController {
         ),
       );
     }
-  } catch (e) {
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('Error'),
-        content: Text('An error occurred: $e'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    );
   }
-}
-
 }

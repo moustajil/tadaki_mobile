@@ -1,6 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:tadakir/Controller/InformationUserController.dart';
 
 class BuildTextInput {
+  String? selectedVille;
+  List<String> villes = [
+    "City 1",
+    "City 2",
+    "City 3"
+  ]; // Example list of cities
+  final Informationusercontroller infoUserController =
+      Get.put(Informationusercontroller());
   Widget buildInputField(
       String label, String hintText, TextEditingController txe,
       {VoidCallback? onIconTap}) {
@@ -62,6 +72,28 @@ class BuildTextInput {
             keyboardType: TextInputType.phone,
             controller: txe,
             decoration: inputDecoration,
+          ),
+        ],
+      );
+    } else if (label == "City") {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          DropdownButtonFormField<String>(
+            value: selectedVille,
+            items: villes
+                .map((ville) => DropdownMenuItem<String>(
+                      value: ville,
+                      child: Text(ville),
+                    ))
+                .toList(),
+            decoration: const InputDecoration(
+              labelText: "Ville",
+              border: OutlineInputBorder(),
+            ),
+            onChanged: (value) {
+              selectedVille = value;
+            },
           ),
         ],
       );

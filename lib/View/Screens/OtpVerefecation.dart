@@ -110,23 +110,36 @@ class _OtpVerificationState extends State<OtpVerification> {
                                 );
                               },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 50,
-                            vertical: 15,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(11),
+                            side: const BorderSide(
+                              color: Color.fromARGB(255, 211, 49, 58),
+                              width: 2, // Set border
+                            ),
                           ),
+                          backgroundColor:
+                              const Color.fromARGB(255, 211, 49, 58),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 8), // Set background color
                         ),
                         child: otpVerificationController.isLoading.value
                             ? const SizedBox(
                                 height: 20,
                                 child: CircularProgressIndicator(
-                                  color: Colors.white,
+                                  color: Color.fromARGB(255, 211, 49, 58),
                                   strokeWidth: 1,
                                 ),
                               )
-                            : const Text(
-                                'Verify',
-                                style: TextStyle(color: Colors.white),
+                            : const Padding(
+                                padding: EdgeInsets.only(bottom: 3, top: 3),
+                                child: Text(
+                                  'Verify',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ),
                       );
                     },

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/get_navigation.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:get/get.dart';
 import 'package:tadakir/Controller/API.dart';
 import 'package:tadakir/Controller/ControllerSharedPrefrances.dart';
 import 'package:tadakir/Controller/CreateNewAccountController.dart';
@@ -28,11 +26,10 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
   final TextEditingController _dateNaissanceController =
       TextEditingController();
 
-  final creatNewAccountCountroller = CreateNewAccountController();
+  final creatNewAccountCountroller = Get.put(CreateNewAccountController());
 
-  final bTextInput = BuildTextInput();
+  BuildTextInput bTextInput = BuildTextInput();
   final snackBar = SnackBarViewr();
-
   final ctrSharedPrefrances = ControllerSharedPreferences();
   @override
   Widget build(BuildContext context) {
@@ -226,7 +223,8 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color.fromARGB(255, 211, 49, 58), // Button background color
+                      backgroundColor: const Color.fromARGB(
+                          255, 211, 49, 58), // Button background color
                       foregroundColor: Colors.white, // Text and icon color
                       padding: const EdgeInsets.symmetric(
                           vertical: 12), // Adjust button padding
