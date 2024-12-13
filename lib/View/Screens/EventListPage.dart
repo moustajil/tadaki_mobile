@@ -119,12 +119,12 @@ class _EventListPageState extends State<EventListPage> {
                               radius: 40.0,
 
                               backgroundColor:
-                                  const Color.fromARGB(255, 170, 164, 164),
+                                  const Color.fromARGB(255, 255, 255, 255),
                               child: Text(
-                                "${infoUser["nom"][0].substring(0, 1).toUpperCase() ?? 'User'}",
+                                "${infoUser["nom"][0].substring(0, 1).toUpperCase() + infoUser["prenom"][0].substring(0, 1).toUpperCase() ?? 'User'}",
                                 style: const TextStyle(
                                     fontSize: 30,
-                                    color: Colors.white,
+                                    color: Color.fromARGB(255, 211, 49, 58),
                                     fontWeight: FontWeight.bold),
                               ), // Show default text if "nom" is null
                             ),

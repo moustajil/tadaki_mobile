@@ -1,98 +1,69 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:tadakir/Controller/API.dart';
+import 'package:get/get.dart';
 import 'package:tadakir/Controller/ControllerSharedPrefrances.dart';
-import 'package:tadakir/View/ShowDialog/ShowDialog.dart';
+import 'package:tadakir/Controller/HistoricDataController.dart';
 
-class Informationofcommand extends StatefulWidget {
-  const Informationofcommand({super.key});
+class HistoricCommandDetail extends StatefulWidget {
+  final int idOfOrder;
+
+  const HistoricCommandDetail({super.key, required this.idOfOrder});
 
   @override
-  State<Informationofcommand> createState() => _InformationofcommandState();
+  State<HistoricCommandDetail> createState() => _HistoricCommandDetailState();
 }
 
-class _InformationofcommandState extends State<Informationofcommand> {
-  final sharedPrefs = ControllerSharedPreferences();
+class _HistoricCommandDetailState extends State<HistoricCommandDetail> {
+  final ControllerSharedPreferences sharedPrefs = ControllerSharedPreferences();
+  final HistoricDataController oldHistoricData =
+      Get.put(HistoricDataController());
 
   Map<String, dynamic> commandDetail = {};
-  late Timer _timer;
-  int _remainingSeconds = 0; // Start with 0, will be updated later.
-  bool _isEmailSent = false;
-  DateTime currentTime = DateTime.now();
-  DateTime? expiredAt;
 
   @override
   void initState() {
     super.initState();
-    _fetchDetailCommand();
-    _startCountdown();
+    _initializeData();
   }
 
-  void _startCountdown() {
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
-      if (_remainingSeconds > 0) {
-        setState(() {
-          _remainingSeconds--;
-        });
-      } else if (_remainingSeconds == 0 && !_isEmailSent) {
-        setState(() {
-          _isEmailSent = true;
-        });
-        // Avoid blocking the UI thread with await in countdown
-        sendEmail(context, sharedPrefs.getEmail() as String).then((_) {
-          _startCountdown(); // Restart the countdown after sending the email.
-        });
+  Future<void> _initializeData() async {
+    await _getOldCarts();
+    await _getOldDataOfTickets();
+  }
+
+  Future<void> _getOldCarts() async {
+    // Get the token from SharedPreferences
+    String? token = await sharedPrefs.getToken();
+
+    // Check if the token is null or not
+    if (token != null && token.isNotEmpty) {
+      // Token exists, proceed to fetch historical data
+      // ignore: use_build_context_synchronously
+      await oldHistoricData.getHistoricalData(context, token);
+    } else {
+      // Token is null or empty, handle accordingly
+      if (context.mounted) {
+        Get.snackbar(
+          "Authentication Required",
+          "Please log in to view historical data.",
+          snackPosition: SnackPosition.BOTTOM,
+        );
       }
-    });
+    }
   }
 
-  @override
-  void dispose() {
-    _timer.cancel();
-    super.dispose();
-  }
-
-  String _formatTime(int seconds) {
-    final minutes = seconds ~/ 60;
-    final secs = seconds % 60;
-    return '${minutes.toString().padLeft(2, '0')}:${secs.toString().padLeft(2, '0')}';
-  }
-
-  Future<void> _fetchDetailCommand() async {
-    try {
-      String? token = await sharedPrefs.getToken();
-
-      if (token == null || token.isEmpty) {
-        print("Token is null or empty");
-        return;
-      }
-
-      final responseBody = await getCartIfExists(context, token);
-
-      if (mounted) {
+  Future<void> _getOldDataOfTickets() async {
+    for (dynamic item in oldHistoricData.oldHestoricalDataList) {
+      if (item["id"] == widget.idOfOrder) {
         setState(() {
-          commandDetail = responseBody;
-          expiredAt = DateTime.parse(commandDetail["expiredAt"]);
-          final difference = expiredAt?.difference(currentTime);
-          print("Current time: $currentTime");
-          print("Expired At: $expiredAt");
-          print(
-              "Difference: ${difference?.inHours} hours and ${difference!.inMinutes % 60} minutes");
-
-          // Calculate the remaining seconds directly
-          _remainingSeconds = difference.inSeconds;
+          commandDetail = item;
         });
+        break;
       }
-    } catch (e) {
-      print("Error fetching command details: $e");
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    int total = commandDetail["amount"];
-    double priceOfTicket = total / commandDetail["tickets"].length;
-
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -119,26 +90,6 @@ class _InformationofcommandState extends State<Informationofcommand> {
                 ),
               ),
               const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    "Timer",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-                  Text(
-                    _formatTime(_remainingSeconds),
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      color: Colors.red.shade700,
-                    ),
-                  ),
-                ],
-              ),
               const SizedBox(height: 20),
               const Text(
                 "Order Details",
@@ -155,16 +106,12 @@ class _InformationofcommandState extends State<Informationofcommand> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "Event:  ${commandDetail[""]}",
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
                     const SizedBox(height: 10),
                     Text(
                       "Category: ${commandDetail["categorieNomFr"]}",
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
                     Table(
@@ -200,7 +147,10 @@ class _InformationofcommandState extends State<Informationofcommand> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              "$priceOfTicket MAD",
+                              commandDetail["tickets"] != null &&
+                                      commandDetail["tickets"].isNotEmpty
+                                  ? "${commandDetail["amount"] / commandDetail["tickets"].length} MAD"
+                                  : "N/A",
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -214,7 +164,7 @@ class _InformationofcommandState extends State<Informationofcommand> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              "$total MAD",
+                              "${commandDetail["amount"]} MAD",
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -314,152 +264,13 @@ class _InformationofcommandState extends State<Informationofcommand> {
                   ],
                 ),
               ),
-              const SizedBox(height: 30),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
-                    padding: const EdgeInsets.symmetric(vertical: 15),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(11),
-                    ),
-                  ),
-                  onPressed: () {
-                    showDialogWithPaymentOptions(context);
-                  },
-                  child: const Text(
-                    "Proceed to Payment",
-                    style: TextStyle(fontSize: 16, color: Colors.white),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 15),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red.shade100,
-                    padding: const EdgeInsets.symmetric(vertical: 15),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(11),
-                    ),
-                  ),
-                  onPressed: () async {
-                    String? token = await sharedPrefs.getToken();
-
-                    // Ensure token is valid
-                    if (token == null || token.isEmpty) {
-                      print("Token is null or empty");
-                      return;
-                    }
-                    // ignore: use_build_context_synchronously
-                    //deletOrder(context, token);
-                    showDialogForCancelOrder(context, token);
-                  },
-                  child: const Text(
-                    "Cancel",
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.red,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 15),
+              const SizedBox(height: 30)
             ],
           ),
         ),
       ),
     );
   }
-}
-
-// ignore: non_constant_identifier_names
-void showDialogWithPaymentOptions(BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return StatefulBuilder(
-        builder:
-            (BuildContext context, void Function(void Function()) setState) {
-          return Dialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                mainAxisSize:
-                    MainAxisSize.min, // Ensures dialog fits its content
-                crossAxisAlignment: CrossAxisAlignment
-                    .stretch, // Stretch buttons to match parent width
-                children: [
-                  const Text(
-                    "Choose Payment Method",
-                    textAlign: TextAlign.center, // Center-align the title
-                    style: TextStyle(
-                      fontSize:
-                          20, // Slightly larger text for better visibility
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pop(); // Close the dialog
-                      // Add CMI functionality here
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 223, 223,
-                          223), // Updated color for better contrast
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(12), // Rounded button
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 12), // Adjusted for vertical stacking
-                    ),
-                    child: const Text(
-                      "CMI",
-                      style: TextStyle(
-                        color: Colors.white, // White text for visibility
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 10), // Spacing between buttons
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pop(); // Close the dialog
-                      // Add M2T functionality here
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          Colors.red.shade600, // Highlighted red button
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(12), // Rounded button
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 12), // Adjusted for vertical stacking
-                    ),
-                    child: const Text(
-                      "M2T",
-                      style: TextStyle(
-                        color: Colors.white, // White text for visibility
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      );
-    },
-  );
 }
 
 Widget buildOrderRow({

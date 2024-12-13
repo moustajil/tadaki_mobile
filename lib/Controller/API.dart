@@ -228,8 +228,7 @@ void showDialogForCommand(
         actions: [
           TextButton.icon(
             onPressed: () {
-              Get.off(() =>
-                  const Informationofcommand()); // Ensure proper navigation.
+              Get.off(() => const Informationofcommand()); // Ensure proper navigation.
             },
             icon: const Icon(Icons.shopping_cart), // Icon for the "panier".
             label: const Text('Panier'), // Label for the button.
