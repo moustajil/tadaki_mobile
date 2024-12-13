@@ -8,12 +8,13 @@ import 'package:http/http.dart' as http;
 import 'package:tadakir/Controller/ControllerSharedPrefrances.dart';
 import 'package:tadakir/View/Screens/EventListPage.dart';
 import 'package:tadakir/View/Screens/InformationOfCommand.dart';
-import 'package:tadakir/View/Screens/OtpVerefecation.dart';
 import 'package:tadakir/View/Screens/SingInAndSingOut.dart';
 import 'package:tadakir/View/Screens/SingInWithEmail.dart';
 import 'package:tadakir/View/ShowDialog/ShowDialog.dart';
 
 const String baseUrl = "https://preprod.tadakir.net";
+final ctrEmail = ControllerSharedPreferences();
+
 
 // Function To check if tocken is exists or note
 Future<void> checkTokenIfValidOrNot(BuildContext context, String token) async {
@@ -43,54 +44,6 @@ Future<void> checkTokenIfValidOrNot(BuildContext context, String token) async {
   }
 }
 
-final ctrEmail = ControllerSharedPreferences();
-Future<void> sendEmail(BuildContext context, String email) async {
-  try {
-    final response = await http.post(
-      Uri.parse('$baseUrl/api/mobile/auth/login/sendotp'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'email': email}),
-    );
-
-    if (response.statusCode == 200) {
-      ctrEmail.saveEmail(email);
-      Get.to(const OtpVerification());
-    } else {
-      showDialog(
-        context: context,
-        builder: (_) => AlertDialog(
-          title: const Text('Errore'),
-          // content: Text(jsonDecode(response.body)["message"]),
-          content: const Text("Email not found"),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        ),
-      );
-    }
-  } catch (e) {
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('Error'),
-        content: Text('An error occurred: $e'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 Future<List<Map<String, dynamic>>> getAllElementInformation(
     BuildContext context, String token) async {

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
-import 'package:tadakir/Controller/API.dart';
 import 'package:tadakir/Controller/ControllerSharedPrefrances.dart';
 import 'package:tadakir/Controller/OtpVerificationController.dart';
 
@@ -16,87 +15,17 @@ class _OtpVerificationState extends State<OtpVerification> {
   final sharedsPrefrenaces = ControllerSharedPreferences();
   final TextEditingController _otpController = TextEditingController();
   final otpVerificationController = Otpverificationcontroller();
-  late Timer _timer;
-  int _remainingSeconds = 60;
 
   @override
   void initState() {
     super.initState();
-    _startCountdown();
-  }
-
-  void _startCountdown() {
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (_remainingSeconds > 0) {
-        setState(() {
-          _remainingSeconds--;
-        });
-      } else {
-        timer.cancel(); // Stop the countdown
-        _showResendOtpDialog(); // Show the dialog to ask for OTP resend
-      }
-    });
-  }
-
-  void _showResendOtpDialog() {
-    showDialog(
-      context: context,
-      barrierDismissible: false, // Prevent dismissing the dialog without action
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Resend OTP'),
-          content:
-              const Text('The OTP has expired. Would you like to resend it?'),
-          actions: [
-            TextButton(
-              onPressed: () async {
-                Navigator.of(context).pop(); // Close the dialog
-
-                try {
-                  final email =
-                      await sharedsPrefrenaces.getEmail(); // Await the Future
-                  if (email != null && email.isNotEmpty) {
-                    _remainingSeconds = 60; // Reset the countdown
-                    _startCountdown(); // Restart the countdown
-                    // ignore: use_build_context_synchronously
-                    await sendEmail(context, email); // Resend the OTP
-                  } else {
-                    // ignore: use_build_context_synchronously
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content:
-                            Text('Unable to fetch email. Please try again.'),
-                      ),
-                    );
-                  }
-                } catch (e) {
-                  // Handle potential errors
-                  print('Error sending email: $e');
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Error: $e'),
-                    ),
-                  );
-                }
-              },
-              child: const Text('Yes'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
-              child: const Text('No'),
-            ),
-          ],
-        );
-      },
-    );
+    otpVerificationController.startCountdown(context);
   }
 
   Future<void> sendEmailAndRestartTimer() async {
     try {
       dynamic email = sharedsPrefrenaces.getEmail();
-      await sendEmail(context, email);
+      await otpVerificationController.sendEmail(context, email);
     } catch (e) {
       // Handle any exceptions (e.g., log or show an error message)
       print('Error sending email: $e');
@@ -106,7 +35,7 @@ class _OtpVerificationState extends State<OtpVerification> {
   @override
   void dispose() {
     _otpController.dispose();
-    _timer.cancel();
+    otpVerificationController.timer.cancel();
     super.dispose();
   }
 
@@ -181,7 +110,7 @@ class _OtpVerificationState extends State<OtpVerification> {
                                 );
                               },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color.fromARGB(255, 211, 49, 58),
+                          backgroundColor: Colors.red,
                           padding: const EdgeInsets.symmetric(
                             horizontal: 50,
                             vertical: 15,
@@ -205,15 +134,17 @@ class _OtpVerificationState extends State<OtpVerification> {
                 ),
                 const SizedBox(height: 20),
                 Center(
-                  child: Text(
-                    _formatTime(_remainingSeconds),
+                    child: Obx(
+                  () => Text(
+                    _formatTime(
+                        otpVerificationController.remainingSeconds.value),
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),
                   ),
-                ),
+                )),
               ],
             ),
           ),

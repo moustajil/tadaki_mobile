@@ -215,6 +215,7 @@ class _ProfileinformationState extends State<Profileinformation> {
 
                   // Call the updateInformation method
                   infoUserController.updateInformation(
+                    // ignore: use_build_context_synchronously
                     context,
                     token,
                     nom,

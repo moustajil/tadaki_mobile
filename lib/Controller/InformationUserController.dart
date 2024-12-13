@@ -8,7 +8,9 @@ import 'package:tadakir/View/ShowDialog/ShowDialog.dart';
 
 class Informationusercontroller extends GetxController {
   RxMap<String, dynamic> infoUser = <String, dynamic>{}.obs;
+
   RxList<Map<String, dynamic>> villes = <Map<String, dynamic>>[].obs;
+  
   final sharedPrefers = ControllerSharedPreferences();
 
   Future<void> fetchInfoUser(BuildContext context) async {

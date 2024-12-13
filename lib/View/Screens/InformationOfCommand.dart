@@ -1,7 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:tadakir/Controller/API.dart';
 import 'package:tadakir/Controller/ControllerSharedPrefrances.dart';
+import 'package:tadakir/Controller/OtpVerificationController.dart';
 import 'package:tadakir/View/ShowDialog/ShowDialog.dart';
 
 class Informationofcommand extends StatefulWidget {
@@ -13,7 +16,7 @@ class Informationofcommand extends StatefulWidget {
 
 class _InformationofcommandState extends State<Informationofcommand> {
   final sharedPrefs = ControllerSharedPreferences();
-
+  final otpVerificationController = Get.put(Otpverificationcontroller());
   Map<String, dynamic> commandDetail = {};
   late Timer _timer;
   int _remainingSeconds = 0; // Start with 0, will be updated later.
@@ -39,7 +42,9 @@ class _InformationofcommandState extends State<Informationofcommand> {
           _isEmailSent = true;
         });
         // Avoid blocking the UI thread with await in countdown
-        sendEmail(context, sharedPrefs.getEmail() as String).then((_) {
+        otpVerificationController
+            .sendEmail(context, sharedPrefs.getEmail() as String)
+            .then((_) {
           _startCountdown(); // Restart the countdown after sending the email.
         });
       }
