@@ -5,6 +5,7 @@ import 'package:tadakir/Controller/API.dart';
 import 'package:tadakir/Controller/ControllerSharedPrefrances.dart';
 import 'package:tadakir/Controller/EventListPageController.dart';
 import 'package:tadakir/View/Screens/HistoricCommadScreen.dart';
+import 'package:tadakir/View/Screens/InformationOfCommand.dart';
 import 'package:tadakir/View/Screens/ProfileInformation.dart';
 import 'package:tadakir/View/Screens/SettingScreen.dart';
 import 'package:tadakir/View/Screens/SingInWithEmail.dart';
@@ -89,10 +90,37 @@ class _EventListPageState extends State<EventListPage> {
           ),
         ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.shopping_cart, color: Colors.black),
-            onPressed: () {},
-          ),
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.shopping_cart, color: Colors.black),
+                onPressed: () {
+                  Get.to(const Informationofcommand());
+                },
+              ),
+              Positioned(
+                top: 0,
+                left: 0,
+                child: Container(
+                  padding: const EdgeInsets.all(1),
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(
+                        10), // Rounded corners for the counter
+                  ),
+                  child: const Text(
+                    '10:00', // Replace with your dynamic counter value
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          )
         ],
       ),
       drawer: Drawer(
@@ -127,6 +155,9 @@ class _EventListPageState extends State<EventListPage> {
                                     color: Color.fromARGB(255, 211, 49, 58),
                                     fontWeight: FontWeight.bold),
                               ), // Show default text if "nom" is null
+                            ),
+                            const SizedBox(
+                              height: 5,
                             ),
                             Text(
                               "${infoUser["nom"] ?? 'No Name'} ${infoUser["prenom"] ?? ''}",

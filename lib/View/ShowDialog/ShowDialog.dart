@@ -156,7 +156,6 @@ void ShowDialogQt(
                               if (kDebugMode) {
                                 print("The event name is: $event");
                               }
-                              // Navigator.pop(context);
                             } catch (e) {
                               debugPrint("Error during API call: $e");
                               if (context.mounted) {

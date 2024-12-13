@@ -20,11 +20,10 @@ class _HistoricCommadScreenState extends State<HistoricCommadScreen> {
   @override
   void initState() {
     super.initState();
-    _getOldCarts(); // Call the method to fetch the data
+    _getOldCarts(); 
   }
 
   Future<void> _getOldCarts() async {
-    // Get the token from SharedPreferences
     String? token = await sharedPrefs.getToken();
 
     // Check if the token is null or not

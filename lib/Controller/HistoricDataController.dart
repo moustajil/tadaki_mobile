@@ -30,7 +30,6 @@ class HistoricDataController extends GetxController {
             .assignAll(List<Map<String, dynamic>>.from(responseBody));
         print("heoooooooo = $responseBody");
       } else if (response.statusCode == 401) {
-        // Unauthorized - show dialog and navigate to sign-in screen
         if (context.mounted) {
           showDialogForResponse(
               context, 'Unauthorized', 'Please log in again.');

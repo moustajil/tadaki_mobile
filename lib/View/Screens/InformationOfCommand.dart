@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tadakir/Controller/API.dart';
 import 'package:tadakir/Controller/ControllerSharedPrefrances.dart';
+import 'package:tadakir/Controller/InformationofCommandController.dart';
 import 'package:tadakir/Controller/OtpVerificationController.dart';
 import 'package:tadakir/View/ShowDialog/ShowDialog.dart';
 
@@ -16,7 +17,7 @@ class Informationofcommand extends StatefulWidget {
 class _InformationofcommandState extends State<Informationofcommand> {
   final sharedPrefs = ControllerSharedPreferences();
   final otpVerificationController = Get.put(Otpverificationcontroller());
-
+  final infoControllerb = InformationofCommandController();
   Map<String, dynamic>? commandDetail = {
     "id": 0,
     "createdAt": "",
