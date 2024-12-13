@@ -165,7 +165,7 @@ void ShowDialogQt(
                                     content:
                                         Text("Failed to send the command: $e"),
                                     backgroundColor:
-                                        Color.fromARGB(255, 211, 49, 58),
+                                        const Color.fromARGB(255, 211, 49, 58),
                                   ),
                                 );
                               }

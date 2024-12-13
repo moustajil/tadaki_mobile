@@ -15,7 +15,6 @@ import 'package:tadakir/View/ShowDialog/ShowDialog.dart';
 const String baseUrl = "https://preprod.tadakir.net";
 final ctrEmail = ControllerSharedPreferences();
 
-
 // Function To check if tocken is exists or note
 Future<void> checkTokenIfValidOrNot(BuildContext context, String token) async {
   try {
@@ -43,7 +42,6 @@ Future<void> checkTokenIfValidOrNot(BuildContext context, String token) async {
     }
   }
 }
-
 
 Future<List<Map<String, dynamic>>> getAllElementInformation(
     BuildContext context, String token) async {
@@ -181,7 +179,8 @@ void showDialogForCommand(
         actions: [
           TextButton.icon(
             onPressed: () {
-              Get.off(() => const Informationofcommand()); // Ensure proper navigation.
+              Get.off(
+                  const Informationofcommand()); // Ensure proper navigation.
             },
             icon: const Icon(Icons.shopping_cart), // Icon for the "panier".
             label: const Text('Panier'), // Label for the button.
@@ -232,7 +231,7 @@ Future<void> sendQtOfCommand(
 
     switch (response.statusCode) {
       case 200:
-        print("Request successful: ${response.body}");
+        //print("Request successful: ${response.body}");
         Get.to(const Informationofcommand());
         break;
 
@@ -349,7 +348,6 @@ Future<Map<String, dynamic>> getInformationUser(
   // Return an empty map in case of error
   return {};
 }
-
 
 Future<void> sendEmailForRegistration(
     BuildContext context, String email) async {

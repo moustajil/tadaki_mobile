@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:tadakir/Controller/API.dart';
 import 'package:tadakir/Controller/ControllerSharedPrefrances.dart';
 import 'package:tadakir/Controller/OtpVerificationController.dart';
@@ -17,7 +16,14 @@ class Informationofcommand extends StatefulWidget {
 class _InformationofcommandState extends State<Informationofcommand> {
   final sharedPrefs = ControllerSharedPreferences();
   final otpVerificationController = Get.put(Otpverificationcontroller());
-  Map<String, dynamic> commandDetail = {};
+  Map<String, dynamic>? commandDetail = {
+    "id": 0,
+    "createdAt": "",
+    "expiredAt": "",
+    "categorieNomFr": "",
+    "amount": 0,
+    "tickets": []
+  };
   late Timer _timer;
   int _remainingSeconds = 0; // Start with 0, will be updated later.
   bool _isEmailSent = false;
@@ -72,12 +78,13 @@ class _InformationofcommandState extends State<Informationofcommand> {
         return;
       }
 
+      // ignore: use_build_context_synchronously
       final responseBody = await getCartIfExists(context, token);
 
       if (mounted) {
         setState(() {
           commandDetail = responseBody;
-          expiredAt = DateTime.parse(commandDetail["expiredAt"]);
+          expiredAt = DateTime.parse(commandDetail!["expiredAt"]);
           final difference = expiredAt?.difference(currentTime);
           print("Current time: $currentTime");
           print("Expired At: $expiredAt");
@@ -95,8 +102,10 @@ class _InformationofcommandState extends State<Informationofcommand> {
 
   @override
   Widget build(BuildContext context) {
-    int total = commandDetail["amount"];
-    double priceOfTicket = total / commandDetail["tickets"].length;
+    print("-------------------- build --------------------$commandDetail");
+
+    int total = commandDetail!["amount"];
+    double priceOfTicket = total / commandDetail!["tickets"].length;
 
     return Scaffold(
       appBar: AppBar(
@@ -166,7 +175,7 @@ class _InformationofcommandState extends State<Informationofcommand> {
                     // ),
                     const SizedBox(height: 10),
                     Text(
-                      "Category: ${commandDetail["categorieNomFr"]}",
+                      "Category: ${commandDetail!["categorieNomFr"]}",
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(
@@ -212,7 +221,7 @@ class _InformationofcommandState extends State<Informationofcommand> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              "${commandDetail["tickets"].length}",
+                              "${commandDetail!["tickets"].length}",
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -237,6 +246,16 @@ class _InformationofcommandState extends State<Informationofcommand> {
                             decoration: BoxDecoration(
                                 color: Color.fromARGB(255, 211, 49, 58)),
                             children: [
+                              Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  "Porte",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
+                              ),
                               Padding(
                                 padding: EdgeInsets.all(8.0),
                                 child: Text(
@@ -267,20 +286,11 @@ class _InformationofcommandState extends State<Informationofcommand> {
                                       color: Colors.white),
                                 ),
                               ),
-                              Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  "Porte",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
-                                ),
-                              ),
                             ],
                           ),
-                          if (commandDetail["tickets"] != null)
-                            ...commandDetail["tickets"].map<TableRow>((ticket) {
+                          if (commandDetail!["tickets"] != null)
+                            ...commandDetail!["tickets"]
+                                .map<TableRow>((ticket) {
                               return TableRow(
                                 children: [
                                   Padding(
