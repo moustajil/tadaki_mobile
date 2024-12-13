@@ -23,7 +23,7 @@ class Informationusercontroller extends GetxController {
       // ignore: use_build_context_synchronously
       final responseBody = await getInformationUser(context, token);
       infoUser.value = responseBody;
-    
+
       // Fetch cities and update the state
       // ignore: use_build_context_synchronously
       List<Map<String, dynamic>> cityList = await getAllCities(context, token);
@@ -121,35 +121,35 @@ class Informationusercontroller extends GetxController {
                 title: const Icon(
                   Icons.check_circle_outline,
                   color: Colors.green,
-                  size: 40,
+                  size: 60,
                 ),
-                content: Column(
+                content: const Column(
                   mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Text(
+                    Text(
                       'Update Successful!',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 22,
                         fontWeight: FontWeight.bold,
                         color: Colors.green,
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    const SizedBox(height: 10),
-                    Text(
-                      '${responseBody['message']}',
-                      textAlign: TextAlign.center,
-                    ),
+                    SizedBox(
+                      height: 20,
+                    )
                   ],
                 ),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text('OK'),
-                  ),
-                ],
+
+                // actions: <Widget>[
+                //   TextButton(
+                //     onPressed: () {
+                //       Navigator.of(context).pop();
+                //     },
+                //     child: const Text('OK'),
+                //   ),
+                // ],
               );
             },
           );

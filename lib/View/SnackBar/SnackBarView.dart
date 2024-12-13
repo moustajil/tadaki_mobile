@@ -7,7 +7,8 @@ class SnackBarViewr {
         message,
         style: const TextStyle(color: Colors.white),
       ),
-      backgroundColor: isError ? Colors.red : Colors.green,
+      backgroundColor:
+          isError ? const Color.fromARGB(255, 211, 49, 58) : Colors.green,
       behavior: SnackBarBehavior.floating,
       duration: const Duration(seconds: 3),
       action: SnackBarAction(
@@ -19,6 +20,4 @@ class SnackBarViewr {
 
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
-
-  
 }

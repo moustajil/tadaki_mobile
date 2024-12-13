@@ -102,7 +102,7 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
                   enabledBorder: const UnderlineInputBorder(),
                   focusedBorder: const UnderlineInputBorder(
                     borderSide:
-                        BorderSide(color: Color.fromARGB(255, 146, 23, 23)),
+                        BorderSide(color: Color.fromARGB(255, 211, 49, 58)),
                   ),
                 ),
               ),
@@ -226,7 +226,7 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red, // Button background color
+                      backgroundColor: Color.fromARGB(255, 211, 49, 58), // Button background color
                       foregroundColor: Colors.white, // Text and icon color
                       padding: const EdgeInsets.symmetric(
                           vertical: 12), // Adjust button padding

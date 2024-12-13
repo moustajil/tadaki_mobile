@@ -131,10 +131,10 @@ class _InformationofcommandState extends State<Informationofcommand> {
                   ),
                   Text(
                     _formatTime(_remainingSeconds),
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
-                      color: Colors.red.shade700,
+                      color: Color.fromARGB(255, 211, 49, 58),
                     ),
                   ),
                 ],
@@ -155,16 +155,16 @@ class _InformationofcommandState extends State<Informationofcommand> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "Event:  ${commandDetail[""]}",
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
+                    // Text(
+                    //   "Event:  ${commandDetail[""]}",
+                    //   style: const TextStyle(fontWeight: FontWeight.bold),
+                    // ),
                     const SizedBox(height: 10),
                     Text(
                       "Category: ${commandDetail["categorieNomFr"]}",
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
                     Table(
@@ -229,7 +229,8 @@ class _InformationofcommandState extends State<Informationofcommand> {
                         border: TableBorder.all(color: Colors.grey.shade300),
                         children: [
                           const TableRow(
-                            decoration: BoxDecoration(color: Colors.red),
+                            decoration: BoxDecoration(
+                                color: Color.fromARGB(255, 211, 49, 58)),
                             children: [
                               Padding(
                                 padding: EdgeInsets.all(8.0),
@@ -319,7 +320,7 @@ class _InformationofcommandState extends State<Informationofcommand> {
                 width: double.infinity,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
+                    backgroundColor: const Color.fromARGB(255, 211, 49, 58),
                     padding: const EdgeInsets.symmetric(vertical: 15),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(11),
@@ -355,13 +356,14 @@ class _InformationofcommandState extends State<Informationofcommand> {
                     }
                     // ignore: use_build_context_synchronously
                     //deletOrder(context, token);
+                    // ignore: use_build_context_synchronously
                     showDialogForCancelOrder(context, token);
                   },
                   child: const Text(
                     "Cancel",
                     style: TextStyle(
                       fontSize: 16,
-                      color: Colors.red,
+                      color: Color.fromARGB(255, 211, 49, 58),
                     ),
                   ),
                 ),
@@ -411,8 +413,8 @@ void showDialogWithPaymentOptions(BuildContext context) {
                       // Add CMI functionality here
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 223, 223,
-                          223), // Updated color for better contrast
+                      backgroundColor: const Color.fromARGB(255, 211, 49,
+                          58), // Updated color for better contrast
                       shape: RoundedRectangleBorder(
                         borderRadius:
                             BorderRadius.circular(12), // Rounded button
@@ -423,20 +425,19 @@ void showDialogWithPaymentOptions(BuildContext context) {
                     child: const Text(
                       "CMI",
                       style: TextStyle(
-                        color: Colors.white, // White text for visibility
+                        color: Colors.white,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 10), // Spacing between buttons
+                  const SizedBox(height: 10),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.of(context).pop(); // Close the dialog
-                      // Add M2T functionality here
+                      Navigator.of(context).pop();
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          Colors.red.shade600, // Highlighted red button
+                      backgroundColor: const Color.fromARGB(
+                          255, 211, 49, 58), // Highlighted red button
                       shape: RoundedRectangleBorder(
                         borderRadius:
                             BorderRadius.circular(12), // Rounded button

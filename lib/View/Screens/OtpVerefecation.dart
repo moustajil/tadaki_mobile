@@ -181,7 +181,7 @@ class _OtpVerificationState extends State<OtpVerification> {
                                 );
                               },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red,
+                          backgroundColor: Color.fromARGB(255, 211, 49, 58),
                           padding: const EdgeInsets.symmetric(
                             horizontal: 50,
                             vertical: 15,

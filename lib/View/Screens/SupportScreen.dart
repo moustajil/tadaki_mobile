@@ -62,11 +62,17 @@ class _SupportScreensState extends State<SupportScreens> {
               padding: const EdgeInsets.symmetric(horizontal: 30),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  minimumSize:
-                      const Size(double.infinity, 50), // Full-width button
+                  backgroundColor: const Color.fromARGB(255, 211, 49, 58),
+                  minimumSize: const Size(double.infinity, 50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(11),
+                    side: const BorderSide(
+                      color: Color.fromARGB(255, 211, 49, 58),
+                      width: 2,
+                    ),
+                  ),
                 ),
-                onPressed: _launchPhone, // Trigger the phone call
+                onPressed: _launchPhone,
                 child: const Text(
                   'Call',
                   style: TextStyle(

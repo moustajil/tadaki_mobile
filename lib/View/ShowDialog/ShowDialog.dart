@@ -131,47 +131,54 @@ void ShowDialogQt(
                           style: TextStyle(color: Colors.grey),
                         ),
                       ),
-                      ElevatedButton(
-                        onPressed: () async {
-                          try {
-                            String? token = await cntSharedPrefs.getToken();
-                            if (token == null || token.isEmpty) {
-                              throw Exception(
-                                  "Authentication token is missing.");
-                            }
-                            await sendQtOfCommand(
-                              // ignore: use_build_context_synchronously
-                              context,
-                              event,
-                              category,
-                              token,
-                              idCategory.toString(),
-                              quantity,
-                              price,
-                            );
-                            if (kDebugMode) {
-                              print("The event name is: $event");
-                            }
-                            // Navigator.pop(context);
-                          } catch (e) {
-                            debugPrint("Error during API call: $e");
-                            if (context.mounted) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content:
-                                      Text("Failed to send the command: $e"),
-                                  backgroundColor: Colors.red,
-                                ),
-                              );
-                            }
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red,
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(11),
                         ),
-                        child: const Text(
-                          "Confirm",
-                          style: TextStyle(color: Colors.white),
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            try {
+                              String? token = await cntSharedPrefs.getToken();
+                              if (token == null || token.isEmpty) {
+                                throw Exception(
+                                    "Authentication token is missing.");
+                              }
+                              await sendQtOfCommand(
+                                // ignore: use_build_context_synchronously
+                                context,
+                                event,
+                                category,
+                                token,
+                                idCategory.toString(),
+                                quantity,
+                                price,
+                              );
+                              if (kDebugMode) {
+                                print("The event name is: $event");
+                              }
+                              // Navigator.pop(context);
+                            } catch (e) {
+                              debugPrint("Error during API call: $e");
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content:
+                                        Text("Failed to send the command: $e"),
+                                    backgroundColor:
+                                        Color.fromARGB(255, 211, 49, 58),
+                                  ),
+                                );
+                              }
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                const Color.fromARGB(255, 211, 49, 58),
+                          ),
+                          child: const Text(
+                            "Confirm",
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
                       ),
                     ],
@@ -335,7 +342,7 @@ void showDialogForCancelOrder(BuildContext context, String token) {
         style: TextStyle(
           fontSize: 18, // Title font size
           fontWeight: FontWeight.bold,
-          color: Colors.redAccent, // Color for the title
+          color: Color.fromARGB(255, 211, 49, 58), // Color for the title
         ),
       ),
       content: const Padding(
@@ -402,8 +409,8 @@ void showDialogForCancelOrder(BuildContext context, String token) {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      Colors.redAccent, // Red background for the "Yes" button
+                  backgroundColor: Color.fromARGB(
+                      255, 211, 49, 58), // Red background for the "Yes" button
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8), // Rounded corners
                   ),

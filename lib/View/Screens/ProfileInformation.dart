@@ -203,44 +203,48 @@ class _ProfileinformationState extends State<Profileinformation> {
                   }
 
                   // Retrieve user information safely with null checks
-                  final nom = _nomController.text.toString();
-                  final prenom = _prenomController.text.toString();
+                  final nom = _nomController.text.trim();
+                  final prenom = _prenomController.text.trim();
                   final sex =
                       isMale.value ? 'homme' : (isFemale.value ? 'femme' : '');
-                  final birthade = _dateNaissanceController.text.toString();
-                  final telephone = _phoneController.text.toString();
-                  final cin = _cinController.text.toString();
-                  final ville = selectedVille.toString();
-                  final email = _emailController.text.toString();
+                  final birthDate = _dateNaissanceController.text.trim();
+                  final telephone = _phoneController.text.trim();
+                  final cin = _cinController.text.trim();
+                  final ville = selectedVille?.trim();
+                  final email = _emailController.text.trim();
 
                   // Call the updateInformation method
                   infoUserController.updateInformation(
-                    // ignore: use_build_context_synchronously
                     context,
                     token,
                     nom,
                     prenom,
                     sex,
-                    birthade,
+                    birthDate,
                     telephone,
                     cin,
-                    ville,
+                    ville!,
                     email,
                   );
                 },
                 style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 211, 49, 58),
                   foregroundColor: Colors.white,
-                  backgroundColor: Colors.red,
                   minimumSize: const Size(double.infinity, 50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(11),
+                    side: const BorderSide(
+                        width: 2,
+                        color: const Color.fromARGB(255, 211, 49, 58)),
+                  ),
                 ),
                 child: const Text(
                   "METTRE A JOUR",
                   style: TextStyle(
-                    color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-              )
+              ),
             ],
           );
         }),

@@ -179,7 +179,7 @@ class _HistoricCommandDetailState extends State<HistoricCommandDetail> {
                         border: TableBorder.all(color: Colors.grey.shade300),
                         children: [
                           const TableRow(
-                            decoration: BoxDecoration(color: Colors.red),
+                            decoration: BoxDecoration(color: Color.fromARGB(255, 211, 49, 58)),
                             children: [
                               Padding(
                                 padding: EdgeInsets.all(8.0),
