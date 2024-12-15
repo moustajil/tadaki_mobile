@@ -26,11 +26,11 @@ class _InformationofcommandState extends State<Informationofcommand> {
     "amount": 0,
     "tickets": []
   };
-  late Timer _timer;
-  int _remainingSeconds = 0; // Start with 0, will be updated later.
-  bool _isEmailSent = false;
-  DateTime currentTime = DateTime.now();
-  DateTime? expiredAt;
+  // late Timer _timer;
+  // int _remainingSeconds = 0; // Start with 0, will be updated later.
+  // bool _isEmailSent = false;
+  // DateTime currentTime = DateTime.now();
+  // DateTime? expiredAt;
 
   @override
   void initState() {
@@ -40,14 +40,16 @@ class _InformationofcommandState extends State<Informationofcommand> {
   }
 
   void _startCountdown() {
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
-      if (_remainingSeconds > 0) {
+    infoControllerb.timer =
+        Timer.periodic(const Duration(seconds: 1), (timer) async {
+      if (infoControllerb.remainingSeconds.value > 0) {
         setState(() {
-          _remainingSeconds--;
+          infoControllerb.remainingSeconds.value--;
         });
-      } else if (_remainingSeconds == 0 && !_isEmailSent) {
+      } else if (infoControllerb.remainingSeconds.value == 0 &&
+          !infoControllerb.isEmailSent.value) {
         setState(() {
-          _isEmailSent = true;
+          infoControllerb.isEmailSent.value = true;
         });
         // Avoid blocking the UI thread with await in countdown
         otpVerificationController
@@ -61,7 +63,7 @@ class _InformationofcommandState extends State<Informationofcommand> {
 
   @override
   void dispose() {
-    _timer.cancel();
+    infoControllerb.timer..cancel();
     super.dispose();
   }
 
@@ -86,15 +88,17 @@ class _InformationofcommandState extends State<Informationofcommand> {
       if (mounted) {
         setState(() {
           commandDetail = responseBody;
-          expiredAt = DateTime.parse(commandDetail!["expiredAt"]);
-          final difference = expiredAt?.difference(currentTime);
-          print("Current time: $currentTime");
-          print("Expired At: $expiredAt");
+          infoControllerb.expiredAt =
+              DateTime.parse(commandDetail!["expiredAt"]);
+          final difference = infoControllerb.expiredAt
+              ?.difference(infoControllerb.currentTime);
+          print("Current time: $infoControllerb.currentTime");
+          print("Expired At: $infoControllerb.expiredAt");
           print(
               "Difference: ${difference?.inHours} hours and ${difference!.inMinutes % 60} minutes");
 
           // Calculate the remaining seconds directly
-          _remainingSeconds = difference.inSeconds;
+          infoControllerb.remainingSeconds = difference.inSeconds as RxInt;
         });
       }
     } catch (e) {
@@ -146,7 +150,7 @@ class _InformationofcommandState extends State<Informationofcommand> {
                     ),
                   ),
                   Text(
-                    _formatTime(_remainingSeconds),
+                    _formatTime(infoControllerb.remainingSeconds.value),
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,

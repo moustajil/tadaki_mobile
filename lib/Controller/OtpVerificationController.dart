@@ -141,7 +141,7 @@ class Otpverificationcontroller extends GetxController {
   void showResendOtpDialog(BuildContext context) {
     showDialog(
       context: context,
-      barrierDismissible: false, // Prevent dismissing the dialog without action
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Resend OTP'),
@@ -221,6 +221,7 @@ class Otpverificationcontroller extends GetxController {
         Get.to(const OtpVerification());
       } else {
         showDialog(
+          // ignore: use_build_context_synchronously
           context: context,
           builder: (_) => AlertDialog(
             title: const Text('Errore'),
@@ -239,6 +240,7 @@ class Otpverificationcontroller extends GetxController {
       }
     } catch (e) {
       showDialog(
+        // ignore: use_build_context_synchronously
         context: context,
         builder: (_) => AlertDialog(
           title: const Text('Error'),
