@@ -20,60 +20,18 @@ class EventListPage extends StatefulWidget {
 
 class _EventListPageState extends State<EventListPage> {
   final sharedPrefs = ControllerSharedPreferences();
-  final eventListController = Eventlistpagecontroller();
+  final eventListController = Get.put(Eventlistpagecontroller());
 
-  // Add a GlobalKey for ScaffoldState
+  // Add a GlobalKey for ScaffoldState and use it for closing and opening drawer
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  Map<String, dynamic> infoUser = {};
-  bool isLoading = true; // Flag to check if user info is still loading
-  bool ifCartExists = false;
-  Map<String, dynamic>? myCart;
 
   @override
   void initState() {
     super.initState();
-    checkCartIfExists();
-    print("My carts is $myCart");
-    _initializeData();
+    eventListController.checkCartIfExists(context);
+    print("My carts is ${eventListController.myCart}");
+    eventListController.initializeData(context);
     eventListController.fetchEvents(context);
-  }
-
-  Future<void> _initializeData() async {
-    try {
-      String? token = await sharedPrefs.getToken();
-      if (token == null || token.isEmpty) {
-        throw Exception("User token is null or empty.");
-      }
-
-      // ignore: use_build_context_synchronously
-      infoUser = await getInformationUser(context, token);
-      setState(() {
-        isLoading = false; // Set loading to false after data is fetched
-      });
-
-      // ignore: use_build_context_synchronously
-      eventListController.fetchEvents(context);
-    } catch (e) {
-      // Handle errors or show a message
-      print("Error initializing data: $e");
-      setState(() {
-        isLoading = false; // Set loading to false in case of error
-      });
-    }
-  }
-
-  Future<void> checkCartIfExists() async {
-    String? token = await sharedPrefs.getToken();
-    if (token == null || token.isEmpty) {
-      throw Exception("User token is missing.");
-    }
-
-    // ignore: use_build_context_synchronously
-    final responseBody = await getCartIfExists(context, token);
-
-    if (responseBody.isNotEmpty) {
-      myCart = responseBody;
-    }
   }
 
   @override
@@ -149,11 +107,11 @@ class _EventListPageState extends State<EventListPage> {
               decoration: const BoxDecoration(
                 color: Color.fromARGB(255, 211, 49, 58),
               ),
-              child: isLoading
+              child: eventListController.isLoading.value
                   ? const Center(
                       child:
                           CircularProgressIndicator()) // Show loading indicator while data is being fetched
-                  : infoUser.isEmpty
+                  : eventListController.infoUser.isEmpty
                       ? const Center(
                           child: Text(
                               "User Info not available")) // Show a message if infoUser is empty
@@ -167,7 +125,7 @@ class _EventListPageState extends State<EventListPage> {
                               backgroundColor:
                                   const Color.fromARGB(255, 255, 255, 255),
                               child: Text(
-                                "${infoUser["nom"][0].substring(0, 1).toUpperCase() + infoUser["prenom"][0].substring(0, 1).toUpperCase() ?? 'User'}",
+                                "${eventListController.infoUser["nom"][0].substring(0, 1).toUpperCase() + eventListController.infoUser["prenom"][0].substring(0, 1).toUpperCase() ?? 'User'}",
                                 style: const TextStyle(
                                     fontSize: 30,
                                     color: Color.fromARGB(255, 211, 49, 58),
@@ -178,13 +136,13 @@ class _EventListPageState extends State<EventListPage> {
                               height: 5,
                             ),
                             Text(
-                              "${infoUser["nom"] ?? 'No Name'} ${infoUser["prenom"] ?? ''}",
+                              "${eventListController.infoUser["nom"] ?? 'No Name'} ${eventListController.infoUser["prenom"] ?? ''}",
                               style: const TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold),
                             ),
                             Text(
-                              "${infoUser["email"] ?? 'No Email'}",
+                              "${eventListController.infoUser["email"] ?? 'No Email'}",
                               style: const TextStyle(color: Colors.white),
                             ),
                           ],

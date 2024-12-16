@@ -1,20 +1,21 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tadakir/Controller/API.dart';
 import 'package:tadakir/Controller/ControllerSharedPrefrances.dart';
+import 'package:tadakir/Controller/EventListPageController.dart';
 
 class Ticketoptionscontroller extends GetxController {
   final sharedPrefs = ControllerSharedPreferences();
 
   // Make the `myEvenet` reactive
   RxMap<String, dynamic> myEvenet = <String, dynamic>{}.obs;
+  final eventController = Get.put(Eventlistpagecontroller());
 
   Future<void> fetchEventSelected(BuildContext context, int idEvenement) async {
     try {
       String? token = await sharedPrefs.getToken();
       // ignore: use_build_context_synchronously
-      await getAllElementInformation(context, token!).then((responseBody) {
+      await eventController.getAllElementInformation(context, token!).then((responseBody) {
         print("Response Body: $responseBody");
 
         // Set the `myEvenet` with the fetched event data
@@ -177,5 +178,4 @@ class Ticketoptionscontroller extends GetxController {
       ),
     );
   }
-  
 }

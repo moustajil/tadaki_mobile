@@ -16,53 +16,53 @@ const String baseUrl = "https://preprod.tadakir.net";
 final ctrEmail = ControllerSharedPreferences();
 
 
-Future<List<Map<String, dynamic>>> getAllElementInformation(
-    BuildContext context, String token) async {
-  try {
-    // Make the HTTP GET request
-    final response = await http.get(
-      Uri.parse('$baseUrl/api/mobile/evenement'),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
-    );
+// Future<List<Map<String, dynamic>>> getAllElementInformation(
+//     BuildContext context, String token) async {
+//   try {
+//     // Make the HTTP GET request
+//     final response = await http.get(
+//       Uri.parse('$baseUrl/api/mobile/evenement'),
+//       headers: {
+//         'Content-Type': 'application/json',
+//         'Authorization': 'Bearer $token',
+//       },
+//     );
 
-    // Check the response status code
-    if (response.statusCode == 200) {
-      // Decode the response body
-      final List<dynamic> responseBody = jsonDecode(response.body);
-      debugPrint('Response Body: $responseBody');
-      // Return the parsed response as a list of maps
-      return List<Map<String, dynamic>>.from(responseBody);
-    } else if (response.statusCode == 401) {
-      // Unauthorized, show error and navigate to login
-      if (context.mounted) {
-        showDialogForResponse(context, 'Unauthorized', 'Please log in again.');
-        Get.offAll(() => const SinginandSingout());
-      }
-    } else {
-      // Handle other errors
-      final errorBody = jsonDecode(response.body);
-      if (context.mounted) {
-        showDialogForResponse(
-          context,
-          'Error',
-          'Failed: ${errorBody['message'] ?? 'Unknown error'}',
-        );
-      }
-    }
-  } catch (e) {
-    // Handle any exceptions
-    if (context.mounted) {
-      showDialogForResponse(context, 'Error', 'An error occurred: $e');
-    }
-    debugPrint('Error: $e');
-  }
+//     // Check the response status code
+//     if (response.statusCode == 200) {
+//       // Decode the response body
+//       final List<dynamic> responseBody = jsonDecode(response.body);
+//       debugPrint('Response Body: $responseBody');
+//       // Return the parsed response as a list of maps
+//       return List<Map<String, dynamic>>.from(responseBody);
+//     } else if (response.statusCode == 401) {
+//       // Unauthorized, show error and navigate to login
+//       if (context.mounted) {
+//         showDialogForResponse(context, 'Unauthorized', 'Please log in again.');
+//         Get.offAll(() => const SinginandSingout());
+//       }
+//     } else {
+//       // Handle other errors
+//       final errorBody = jsonDecode(response.body);
+//       if (context.mounted) {
+//         showDialogForResponse(
+//           context,
+//           'Error',
+//           'Failed: ${errorBody['message'] ?? 'Unknown error'}',
+//         );
+//       }
+//     }
+//   } catch (e) {
+//     // Handle any exceptions
+//     if (context.mounted) {
+//       showDialogForResponse(context, 'Error', 'An error occurred: $e');
+//     }
+//     debugPrint('Error: $e');
+//   }
 
-  // Return an empty list in case of an error or failure
-  return [];
-}
+//   // Return an empty list in case of an error or failure
+//   return [];
+// }
 
 Future<List<Map<String, dynamic>>> getCategoryOfEvenement(
     BuildContext context, String token, String id) async {
