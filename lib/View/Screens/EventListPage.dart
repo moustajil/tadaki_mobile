@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ionicons/ionicons.dart';
@@ -26,10 +28,14 @@ class _EventListPageState extends State<EventListPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   Map<String, dynamic> infoUser = {};
   bool isLoading = true; // Flag to check if user info is still loading
+  bool ifCartExists = false;
+  Map<String, dynamic>? myCart;
 
   @override
   void initState() {
     super.initState();
+    checkCartIfExists();
+    print("My carts is $myCart");
     _initializeData();
     eventListController.fetchEvents(context);
   }
@@ -55,6 +61,20 @@ class _EventListPageState extends State<EventListPage> {
       setState(() {
         isLoading = false; // Set loading to false in case of error
       });
+    }
+  }
+
+  Future<void> checkCartIfExists() async {
+    String? token = await sharedPrefs.getToken();
+    if (token == null || token.isEmpty) {
+      throw Exception("User token is missing.");
+    }
+
+    // ignore: use_build_context_synchronously
+    final responseBody = await getCartIfExists(context, token);
+
+    if (responseBody.isNotEmpty) {
+      myCart = responseBody;
     }
   }
 
