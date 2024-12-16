@@ -2,12 +2,14 @@ import 'package:get/get.dart';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:tadakir/Controller/ControllerSharedPrefrances.dart';
 import 'package:tadakir/View/Screens/EventListPage.dart';
 import 'package:tadakir/View/Screens/SingInAndSingOut.dart';
 import 'package:tadakir/View/ShowDialog/ShowDialog.dart';
 
 class Splachscreencontroller extends GetxController {
   String baseUrl = "https://preprod.tadakir.net";
+  var sharedPrefers = ControllerSharedPreferences();
 
   // Function To check if tocken is exists or note
   Future<void> checkTokenIfValidOrNot(
@@ -37,4 +39,19 @@ class Splachscreencontroller extends GetxController {
       }
     }
   }
+
+
+   void initiateNavigation( BuildContext context) {
+    Future.delayed(const Duration(seconds: 2), () async {
+      final token = await sharedPrefers.getToken();
+
+      if (token == null) {
+        Get.to(const SinginandSingout());
+      } else {
+        // ignore: use_build_context_synchronously
+        checkTokenIfValidOrNot(context, token);
+      }
+    });
+  }
+
 }

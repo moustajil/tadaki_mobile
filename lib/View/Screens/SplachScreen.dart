@@ -37,20 +37,7 @@ class _SplachScreenState extends State<SplachScreen>
     );
 
     // Check token validity after a delay
-    _initiateNavigation();
-  }
-
-  void _initiateNavigation() {
-    Future.delayed(const Duration(seconds: 2), () async {
-      final token = await sharedPrefers.getToken();
-
-      if (token == null) {
-        Get.to(const SinginandSingout());
-      } else {
-        // ignore: use_build_context_synchronously
-        splachscreenController.checkTokenIfValidOrNot(context, token);
-      }
-    });
+    splachscreenController.initiateNavigation(context);
   }
 
   @override

@@ -6,13 +6,13 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:http/http.dart' as http;
 import 'package:tadakir/Controller/ControllerSharedPrefrances.dart';
-import 'package:tadakir/View/Screens/EventListPage.dart';
 import 'package:tadakir/View/Screens/InformationOfCommand.dart';
 import 'package:tadakir/View/Screens/SingInAndSingOut.dart';
 import 'package:tadakir/View/Screens/SingInWithEmail.dart';
 import 'package:tadakir/View/ShowDialog/ShowDialog.dart';
 
 const String baseUrl = "https://preprod.tadakir.net";
+
 final ctrEmail = ControllerSharedPreferences();
 
 
