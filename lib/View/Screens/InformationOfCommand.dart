@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tadakir/Controller/API.dart';
 import 'package:tadakir/Controller/ControllerSharedPrefrances.dart';
+import 'package:tadakir/Controller/EventListPageController.dart';
 import 'package:tadakir/Controller/InformationofCommandController.dart';
 import 'package:tadakir/Controller/OtpVerificationController.dart';
+import 'package:tadakir/Controller/TicketOptionsController.dart';
 import 'package:tadakir/View/ShowDialog/ShowDialog.dart';
 
 class Informationofcommand extends StatefulWidget {
@@ -18,6 +20,7 @@ class _InformationofcommandState extends State<Informationofcommand> {
   final sharedPrefs = ControllerSharedPreferences();
   final otpVerificationController = Get.put(Otpverificationcontroller());
   final infoControllerb = Get.put(InformationofCommandController());
+  final eventInfo = Get.put(Ticketoptionscontroller());
   Map<String, dynamic>? commandDetail = {
     "id": 0,
     "createdAt": "",
@@ -55,14 +58,6 @@ class _InformationofcommandState extends State<Informationofcommand> {
             .then((_) {
           _startCountdown(); // Restart the countdown after sending the email.
         });
-      } else if (_remainingSeconds == 0) {
-        String? token = await sharedPrefs.getToken();
-
-        if (token == null || token.isEmpty) {
-          print("Token is null or empty");
-          return;
-        }
-        infoControllerb.deletOrder(context, token);
       }
     });
   }
@@ -90,7 +85,6 @@ class _InformationofcommandState extends State<Informationofcommand> {
 
       // ignore: use_build_context_synchronously
       final responseBody =
-          // ignore: use_build_context_synchronously
           await infoControllerb.getCartIfExists(context, token);
 
       if (mounted) {
@@ -384,7 +378,7 @@ class _InformationofcommandState extends State<Informationofcommand> {
                     // ignore: use_build_context_synchronously
                     //deletOrder(context, token);
                     // ignore: use_build_context_synchronously
-                    showDialogForCancelOrder(context, token);
+                    showDialogForCancelOrder(context, token,eventInfo.myEvenet['evenementId']);
                   },
                   child: const Text(
                     "Cancel",

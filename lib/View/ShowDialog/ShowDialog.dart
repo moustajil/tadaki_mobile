@@ -5,6 +5,7 @@ import 'package:tadakir/Controller/API.dart';
 import 'package:tadakir/Controller/ControllerSharedPrefrances.dart';
 import 'package:tadakir/Controller/InformationofCommandController.dart';
 import 'package:tadakir/View/Screens/SingInAndSingOut.dart';
+import 'package:tadakir/View/Screens/TicketOptions.dart';
 
 final informationController = Get.put(InformationofCommandController());
 // ignore: non_constant_identifier_names
@@ -330,7 +331,7 @@ void showDialogForResponse(BuildContext context, String title, String content) {
   );
 }
 
-void showDialogForCancelOrder(BuildContext context, String token) {
+void showDialogForCancelOrder(BuildContext context, String token,int idevenement) {
   showDialog(
     context: context,
     builder: (_) => AlertDialog(
@@ -398,7 +399,9 @@ void showDialogForCancelOrder(BuildContext context, String token) {
                     await informationController.deletOrder(context, token);
 
                     // After successful deletion, pop the current screen
-                    Get.back();
+                    Get.to(TicketOptions(
+                      evenementId: idevenement,
+                    ));
                   } catch (e) {
                     // Handle the error, if any, that occurred during the deletion process
                     print("Error: $e");
