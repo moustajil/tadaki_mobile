@@ -15,7 +15,6 @@ const String baseUrl = "https://preprod.tadakir.net";
 
 final ctrEmail = ControllerSharedPreferences();
 
-
 Future<List<Map<String, dynamic>>> getCategoryOfEvenement(
     BuildContext context, String token, String id) async {
   try {
@@ -267,52 +266,3 @@ Future<void> sendEmailForRegistration(
     debugPrint('Error in sendEmailForRegistration: $e');
   }
 }
-
-// Future<void> deletOrder(BuildContext context, String token) async {
-//   try {
-//     // Show loading indicator
-//     showDialog(
-//         context: context,
-//         builder: (_) => const Center(child: CircularProgressIndicator()));
-
-//     final response = await http.delete(
-//       Uri.parse('$baseUrl/api/mobile/order/cart'),
-//       headers: {
-//         'Content-Type': 'application/json',
-//         'Authorization': 'Bearer $token',
-//       },
-//     );
-
-//     Navigator.pop(context);
-
-//     // Handle response
-//     if (response.statusCode == 200) {
-//       final Map<String, dynamic> responseBody = jsonDecode(response.body);
-//       print(
-//           'Response Body: ---------------------------------------------------  $responseBody');
-//       if (context.mounted) {
-//         Get.back();
-//       }
-//     } else if (response.statusCode == 401) {
-//       if (context.mounted) {
-//         showDialogForResponse(context, 'Unauthorized', 'Please log in again.');
-//         Get.offAll(() => const SinginandSingout());
-//       }
-//     } else {
-//       final errorBody = jsonDecode(response.body);
-//       if (context.mounted) {
-//         showDialogForResponse(
-//           context,
-//           'Error',
-//           'Failed: ${errorBody['message'] ?? 'Unknown error'}',
-//         );
-//       }
-//     }
-//   } catch (e) {
-//     Navigator.pop(context);
-//     if (context.mounted) {
-//       showDialogForResponse(context, 'Error', 'An error occurred: $e');
-//     }
-//     debugPrint('Error: $e');
-//   }
-// }

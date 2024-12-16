@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ionicons/ionicons.dart';
@@ -21,102 +23,97 @@ class EventListPage extends StatefulWidget {
 class _EventListPageState extends State<EventListPage> {
   final sharedPrefs = ControllerSharedPreferences();
   final eventListController = Get.put(Eventlistpagecontroller());
-  final infoControllerb = Get.put(InformationofCommandController());
+  final infoController = Get.put(InformationofCommandController());
 
-  // late Timer _timer;
-  // int _remainingSeconds = 0; // Start with 0, will be updated later.
-  // bool _isEmailSent = false;
-  // DateTime currentTime = DateTime.now();
-  // DateTime? expiredAt;
-
-  // void _startCountdown() {
-  //   _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
-  //     if (_remainingSeconds > 0) {
-  //       setState(() {
-  //         _remainingSeconds--;
-  //       });
-  //     } else if (_remainingSeconds == 0 && !_isEmailSent) {
-  //       setState(() {
-  //         _isEmailSent = true;
-  //       });
-  //       // Avoid blocking the UI thread with await in countdown
-  //       otpVerificationController
-  //           .sendEmail(context, sharedPrefs.getEmail() as String)
-  //           .then((_) {
-  //         _startCountdown(); // Restart the countdown after sending the email.
-  //       });
-  //     } else if (_remainingSeconds == 0) {
-  //       String? token = await sharedPrefs.getToken();
-
-  //       if (token == null || token.isEmpty) {
-  //         print("Token is null or empty");
-  //         return;
-  //       }
-  //       infoControllerb.deletOrder(context, token);
-  //     }
-  //   });
-  // }
-
-  // String _formatTime(int seconds) {
-  //   final minutes = seconds ~/ 60;
-  //   final secs = seconds % 60;
-  //   return '${minutes.toString().padLeft(2, '0')}:${secs.toString().padLeft(2, '0')}';
-  // }
-
-  // Add a GlobalKey for ScaffoldState and use it for closing and opening drawer
+  Map<String, dynamic>? commandDetail;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  late Timer _timer;
+  int _remainingSeconds = 0;
+  String _formattedTime = "";
+  DateTime currentTime = DateTime.now();
+  DateTime? expiredAt;
 
   @override
   void initState() {
     super.initState();
-    //eventListController.checkCartIfExists(context);
-    //print("My carts is ${eventListController.myCart}");
-    checkCarts();
+    _fetchDetailCommand();
     eventListController.initializeData(context);
     eventListController.fetchEvents(context);
   }
 
-  void checkCarts() async {
-    String? token = await sharedPrefs.getToken();
+  Future<void> _fetchDetailCommand() async {
+    try {
+      String? token = await sharedPrefs.getToken();
 
-    if (token == null || token.isEmpty) {
-      print("Token is null or empty");
-      return;
+      if (token == null || token.isEmpty) {
+        print("Token is null or empty");
+        return;
+      }
+
+      final responseBody = await infoController.getCartIfExists(context, token);
+
+      if (mounted) {
+        setState(() {
+          commandDetail = responseBody;
+          if (commandDetail != null && commandDetail!["expiredAt"] != null) {
+            expiredAt = DateTime.parse(commandDetail!["expiredAt"]);
+            final difference = expiredAt!.difference(currentTime);
+            _remainingSeconds = difference.inSeconds;
+            _formattedTime = _formatTime(_remainingSeconds);
+            _startTimer();
+          }
+        });
+      }
+    } catch (e) {
+      print("Error fetching command details: $e");
     }
-    print(infoControllerb.getCartIfExists(context, token));
+  }
+
+  void _startTimer() {
+    const oneSecond = Duration(seconds: 1);
+
+    _timer = Timer.periodic(oneSecond, (timer) {
+      if (_remainingSeconds > 0) {
+        setState(() {
+          _remainingSeconds--;
+          _formattedTime = _formatTime(_remainingSeconds);
+        });
+      } else {
+        timer.cancel();
+        print("Timer ended");
+      }
+    });
+  }
+
+  String _formatTime(int seconds) {
+    final minutes = seconds ~/ 60;
+    final secs = seconds % 60;
+    return '${minutes.toString().padLeft(2, '0')}:${secs.toString().padLeft(2, '0')}';
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey, // Assign the GlobalKey to Scaffold
+      key: _scaffoldKey,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(
-            Icons.menu, // Sandwich menu icon
+            Icons.menu,
             color: Colors.black,
           ),
           onPressed: () {
-            // Use the key to open the drawer
             _scaffoldKey.currentState?.openDrawer();
           },
         ),
-        // title: Container(
-        //   margin: const EdgeInsets.only(bottom: 15, top: 20),
-        //   decoration: BoxDecoration(
-        //     color: Colors.white,
-        //     borderRadius: BorderRadius.circular(20),
-        //   ),
-        //   child: const TextField(
-        //     decoration: InputDecoration(
-        //       hintText: "Search...",
-        //       border: InputBorder.none,
-        //       prefixIcon: Icon(Icons.search),
-        //     ),
-        //   ),
-        // ),
         actions: [
           Stack(
             alignment: Alignment.center,
@@ -124,31 +121,32 @@ class _EventListPageState extends State<EventListPage> {
               IconButton(
                 icon: const Icon(Icons.shopping_cart, color: Colors.black),
                 onPressed: () {
-                  Get.to(const Informationofcommand());
+                  Get.to(() => const Informationofcommand());
                 },
               ),
-              Positioned(
-                top: 0,
-                left: 0,
-                child: Container(
-                  padding: const EdgeInsets.all(1),
-                  decoration: BoxDecoration(
-                    color: Colors.red,
-                    borderRadius: BorderRadius.circular(
-                        10), // Rounded corners for the counter
-                  ),
-                  child: const Text(
-                    '10:00', // Replace with your dynamic counter value
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+              if (_remainingSeconds > 0)
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  child: Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Obx(
+                        () => Text(
+                          _formattedTime,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      )),
                 ),
-              ),
             ],
-          )
+          ),
         ],
       ),
       drawer: Drawer(

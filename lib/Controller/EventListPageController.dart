@@ -253,18 +253,4 @@ class Eventlistpagecontroller extends GetxController {
       isLoading.value = false; // Set loading to false in case of error
     }
   }
-
-  // Future<void> checkCartIfExists(BuildContext context) async {
-  //   String? token = await sharedPrefs.getToken();
-  //   if (token == null || token.isEmpty) {
-  //     throw Exception("User token is missing.");
-  //   }
-
-  //   // ignore: use_build_context_synchronously
-  //   final responseBody = await getCartIfExists(context, token);
-
-  //   if (responseBody.isNotEmpty) {
-  //     myCart!.value = responseBody;
-  //   }
-  // }
 }

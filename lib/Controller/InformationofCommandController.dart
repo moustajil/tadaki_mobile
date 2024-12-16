@@ -99,11 +99,7 @@ class InformationofCommandController extends GetxController {
         // Handle other errors
         final errorBody = jsonDecode(response.body);
         if (context.mounted) {
-          showDialogForResponse(
-            context,
-            'Error 12',
-            'Failed: ${errorBody['message'] ?? 'Unknown error'}',
-          );
+          return {};
         }
       }
     } catch (e) {

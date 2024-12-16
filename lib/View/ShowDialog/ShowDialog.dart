@@ -331,7 +331,8 @@ void showDialogForResponse(BuildContext context, String title, String content) {
   );
 }
 
-void showDialogForCancelOrder(BuildContext context, String token,int idevenement) {
+void showDialogForCancelOrder(
+    BuildContext context, String token, int idevenement) {
   showDialog(
     context: context,
     builder: (_) => AlertDialog(
@@ -399,7 +400,7 @@ void showDialogForCancelOrder(BuildContext context, String token,int idevenement
                     await informationController.deletOrder(context, token);
 
                     // After successful deletion, pop the current screen
-                    Get.to(TicketOptions(
+                    Get.off(TicketOptions(
                       evenementId: idevenement,
                     ));
                   } catch (e) {

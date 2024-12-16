@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tadakir/Controller/API.dart';
 import 'package:tadakir/Controller/ControllerSharedPrefrances.dart';
-import 'package:tadakir/Controller/EventListPageController.dart';
 import 'package:tadakir/Controller/InformationofCommandController.dart';
 import 'package:tadakir/Controller/OtpVerificationController.dart';
 import 'package:tadakir/Controller/TicketOptionsController.dart';
@@ -378,7 +376,11 @@ class _InformationofcommandState extends State<Informationofcommand> {
                     // ignore: use_build_context_synchronously
                     //deletOrder(context, token);
                     // ignore: use_build_context_synchronously
-                    showDialogForCancelOrder(context, token,eventInfo.myEvenet['evenementId']);
+                    showDialogForCancelOrder(
+                        // ignore: use_build_context_synchronously
+                        context,
+                        token,
+                        eventInfo.myEvenet['evenementId']);
                   },
                   child: const Text(
                     "Cancel",
