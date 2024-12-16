@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tadakir/Controller/API.dart';
 import 'package:tadakir/Controller/ControllerSharedPrefrances.dart';
 import 'package:tadakir/Controller/EventListPageController.dart';
 
@@ -9,13 +10,45 @@ class Ticketoptionscontroller extends GetxController {
 
   // Make the `myEvenet` reactive
   RxMap<String, dynamic> myEvenet = <String, dynamic>{}.obs;
+  RxList eventsCategory = [].obs;
   final eventController = Get.put(Eventlistpagecontroller());
 
+
+ //fetche category og tickets
+  Future<void> fetchCategory(BuildContext context) async {
+    try {
+      // Get the token
+      String? token =
+          await sharedPrefs.getToken(); // Make sure getToken is async
+
+      // Print the event ID
+
+      // Fetch event category data
+      await getCategoryOfEvenement(
+              // ignore: use_build_context_synchronously
+              context,
+              token!,
+              "47")
+          .then(
+        (responseBody) {
+          eventsCategory.value = responseBody;
+        },
+      );
+      print(
+          "============================================${eventsCategory.length}");
+    } catch (e) {
+      print("Error fetching events: $e");
+    }
+  }
+
+  // fetche to get element selected
   Future<void> fetchEventSelected(BuildContext context, int idEvenement) async {
     try {
       String? token = await sharedPrefs.getToken();
       // ignore: use_build_context_synchronously
-      await eventController.getAllElementInformation(context, token!).then((responseBody) {
+      await eventController
+          .getAllElementInformation(context, token!)
+          .then((responseBody) {
         print("Response Body: $responseBody");
 
         // Set the `myEvenet` with the fetched event data
@@ -36,6 +69,7 @@ class Ticketoptionscontroller extends GetxController {
     }
   }
 
+  // event ticket
   Widget eventCard({
     required BuildContext context,
     required String clubLogo,

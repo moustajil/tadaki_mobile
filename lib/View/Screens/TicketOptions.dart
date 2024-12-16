@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:get/get.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:tadakir/Controller/API.dart';
 import 'package:tadakir/Controller/ControllerSharedPrefrances.dart';
 import 'package:tadakir/Controller/TicketOptionsController.dart';
 import 'package:tadakir/View/ShowDialog/ShowDialog.dart';
@@ -19,7 +18,7 @@ class TicketOptions extends StatefulWidget {
 }
 
 class _TicketOptionsState extends State<TicketOptions> {
-  final ticketOption = Ticketoptionscontroller();
+  final ticketOption = Get.put(Ticketoptionscontroller());
   final sharedPrefs = ControllerSharedPreferences();
   final String svgAssetPath = 'assets/images/STADE.svg';
   XmlDocument? document;
@@ -32,7 +31,7 @@ class _TicketOptionsState extends State<TicketOptions> {
     ticketOption.fetchEventSelected(context, widget.evenementId);
     //printIdEvenement();
     _loadSvgContent();
-    _fetchCategory();
+    ticketOption.fetchCategory(context);
   }
 
   Future<void> _loadSvgContent() async {
@@ -64,39 +63,6 @@ class _TicketOptionsState extends State<TicketOptions> {
       });
     } catch (e) {
       debugPrint('Error loading SVG: $e');
-    }
-  }
-
-  // void printIdEvenement() async {
-  //   int? id = await sharedPrefs.getIdEvenement();
-  //   print(id);
-  // }
-
-  List<Map<String, dynamic>> eventsCategory = [];
-
-  Future<void> _fetchCategory() async {
-    try {
-      // Get the token
-      String? token =
-          await sharedPrefs.getToken(); // Make sure getToken is async
-
-      // Print the event ID
-
-      // Fetch event category data
-      await getCategoryOfEvenement(
-              // ignore: use_build_context_synchronously
-              context,
-              token!,
-              "47")
-          .then((responseBody) {
-        setState(() {
-          eventsCategory = responseBody;
-        });
-      });
-      print(
-          "============================================${eventsCategory.length}");
-    } catch (e) {
-      print("Error fetching events: $e");
     }
   }
 
@@ -150,44 +116,47 @@ class _TicketOptionsState extends State<TicketOptions> {
                     )
                   else
                     const CircularProgressIndicator(),
-                  ListView.builder(
-                    itemCount: eventsCategory.length,
-                    shrinkWrap:
-                        true, // Important to allow the ListView to be nested
-                    itemBuilder: (context, index) {
-                      final event = eventsCategory[index];
-                      final List<dynamic> categories =
-                          event["categories"]; // Access the categories list
+                  Obx(
+                    () => ListView.builder(
+                      itemCount: ticketOption.eventsCategory.length,
+                      shrinkWrap:
+                          true, // Important to allow the ListView to be nested
+                      itemBuilder: (context, index) {
+                        final event = ticketOption.eventsCategory[index];
+                        final List<dynamic> categories =
+                            event["categories"]; // Access the categories list
 
-                      return ListView.builder(
-                        itemCount: categories
-                            .length, // Loop over categories for the current event
-                        shrinkWrap:
-                            true, // Important to allow the nested ListView to be scrollable
-                        itemBuilder: (context, categoryIndex) {
-                          final category = categories[categoryIndex];
+                        return ListView.builder(
+                          itemCount: categories
+                              .length, // Loop over categories for the current event
+                          shrinkWrap:
+                              true, // Important to allow the nested ListView to be scrollable
+                          itemBuilder: (context, categoryIndex) {
+                            final category = categories[categoryIndex];
 
-                          final color =
-                              category['evenementCategorieTicketColor'] ??
-                                  '#FFFFFF';
-                          final categoryName =
-                              category['categorieTicketNom'] ?? 'Unknown';
-                          final price = category['evenementCategorieTicketPrix']
-                                  ?.toString() ??
-                              '0';
-                          final quantity =
-                              category['quantity']?.toString() ?? '0';
+                            final color =
+                                category['evenementCategorieTicketColor'] ??
+                                    '#FFFFFF';
+                            final categoryName =
+                                category['categorieTicketNom'] ?? 'Unknown';
+                            final price =
+                                category['evenementCategorieTicketPrix']
+                                        ?.toString() ??
+                                    '0';
+                            final quantity =
+                                category['quantity']?.toString() ?? '0';
 
-                          return Category(
-                              color,
-                              categoryName,
-                              price,
-                              quantity,
-                              "hello word",
-                              category['evenementCategorieTicketId']);
-                        },
-                      );
-                    },
+                            return Category(
+                                color,
+                                categoryName,
+                                price,
+                                quantity,
+                                "hello word",
+                                category['evenementCategorieTicketId']);
+                          },
+                        );
+                      },
+                    ),
                   )
                 ],
               ),

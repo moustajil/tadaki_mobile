@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:tadakir/Controller/API.dart';
 import 'package:tadakir/Controller/ControllerSharedPrefrances.dart';
 import 'package:tadakir/Controller/EventListPageController.dart';
 import 'package:tadakir/View/Screens/HistoricCommadScreen.dart';
@@ -28,8 +27,8 @@ class _EventListPageState extends State<EventListPage> {
   @override
   void initState() {
     super.initState();
-    eventListController.checkCartIfExists(context);
-    print("My carts is ${eventListController.myCart}");
+    //eventListController.checkCartIfExists(context);
+    //print("My carts is ${eventListController.myCart}");
     eventListController.initializeData(context);
     eventListController.fetchEvents(context);
   }
@@ -104,50 +103,51 @@ class _EventListPageState extends State<EventListPage> {
           padding: EdgeInsets.zero,
           children: [
             DrawerHeader(
-              decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 211, 49, 58),
-              ),
-              child: eventListController.isLoading.value
-                  ? const Center(
-                      child:
-                          CircularProgressIndicator()) // Show loading indicator while data is being fetched
-                  : eventListController.infoUser.isEmpty
-                      ? const Center(
-                          child: Text(
-                              "User Info not available")) // Show a message if infoUser is empty
-                      : Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CircleAvatar(
-                              radius: 40.0,
+                decoration: const BoxDecoration(
+                  color: Color.fromARGB(255, 211, 49, 58),
+                ),
+                child: eventListController.isLoading.value
+                    ? const Center(
+                        child:
+                            CircularProgressIndicator()) // Show loading indicator while data is being fetched
+                    : eventListController.infoUser.isEmpty
+                        ? const Center(
+                            child: Text(
+                                "User Info not available")) // Show a message if infoUser is empty
+                        : Obx(
+                            () => Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                CircleAvatar(
+                                  radius: 40.0,
 
-                              backgroundColor:
-                                  const Color.fromARGB(255, 255, 255, 255),
-                              child: Text(
-                                "${eventListController.infoUser["nom"][0].substring(0, 1).toUpperCase() + eventListController.infoUser["prenom"][0].substring(0, 1).toUpperCase() ?? 'User'}",
-                                style: const TextStyle(
-                                    fontSize: 30,
-                                    color: Color.fromARGB(255, 211, 49, 58),
-                                    fontWeight: FontWeight.bold),
-                              ), // Show default text if "nom" is null
+                                  backgroundColor:
+                                      const Color.fromARGB(255, 255, 255, 255),
+                                  child: Text(
+                                    "${eventListController.infoUser["nom"][0].substring(0, 1).toUpperCase() + eventListController.infoUser["prenom"][0].substring(0, 1).toUpperCase() ?? 'User'}",
+                                    style: const TextStyle(
+                                        fontSize: 30,
+                                        color: Color.fromARGB(255, 211, 49, 58),
+                                        fontWeight: FontWeight.bold),
+                                  ), // Show default text if "nom" is null
+                                ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  "${eventListController.infoUser["nom"] ?? 'No Name'} ${eventListController.infoUser["prenom"] ?? ''}",
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  "${eventListController.infoUser["email"] ?? 'No Email'}",
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                              ],
                             ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              "${eventListController.infoUser["nom"] ?? 'No Name'} ${eventListController.infoUser["prenom"] ?? ''}",
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              "${eventListController.infoUser["email"] ?? 'No Email'}",
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                          ],
-                        ),
-            ),
+                          )),
             //
             const SizedBox(
               height: 10,

@@ -254,17 +254,17 @@ class Eventlistpagecontroller extends GetxController {
     }
   }
 
-  Future<void> checkCartIfExists(BuildContext context) async {
-    String? token = await sharedPrefs.getToken();
-    if (token == null || token.isEmpty) {
-      throw Exception("User token is missing.");
-    }
+  // Future<void> checkCartIfExists(BuildContext context) async {
+  //   String? token = await sharedPrefs.getToken();
+  //   if (token == null || token.isEmpty) {
+  //     throw Exception("User token is missing.");
+  //   }
 
-    // ignore: use_build_context_synchronously
-    final responseBody = await getCartIfExists(context, token);
+  //   // ignore: use_build_context_synchronously
+  //   final responseBody = await getCartIfExists(context, token);
 
-    if (responseBody.isNotEmpty) {
-      myCart!.value = responseBody;
-    }
-  }
+  //   if (responseBody.isNotEmpty) {
+  //     myCart!.value = responseBody;
+  //   }
+  // }
 }
