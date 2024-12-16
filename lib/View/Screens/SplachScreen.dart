@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:tadakir/Controller/ControllerSharedPrefrances.dart';
 import 'package:tadakir/Controller/InformationUserController.dart';
 import 'package:tadakir/Controller/SplachScreenController.dart';
-import 'package:tadakir/View/Screens/SingInAndSingOut.dart';
 
 class SplachScreen extends StatefulWidget {
   const SplachScreen({super.key});

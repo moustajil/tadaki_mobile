@@ -13,7 +13,6 @@ class SignInWithEmail extends StatefulWidget {
 
 class _SignInWithEmailState extends State<SignInWithEmail> {
   final emailController = TextEditingController();
-  //bool isLoading = false; // State to manage loading indicator
   final Singinwithemailcontroller singInWithEmailController =
       Get.put(Singinwithemailcontroller());
 
@@ -36,7 +35,7 @@ class _SignInWithEmailState extends State<SignInWithEmail> {
                   'assets/images/logo-default.webp',
                   width: 180,
                 ),
-                const SizedBox(height: 80),
+                const SizedBox(height: 70),
 
                 // Title Section
                 Align(
@@ -71,7 +70,7 @@ class _SignInWithEmailState extends State<SignInWithEmail> {
                             decoration: BoxDecoration(
                               color: const Color.fromARGB(255, 255, 232, 232),
                               border: Border.all(
-                                color:const Color.fromARGB(255, 211, 49, 58),
+                                color: const Color.fromARGB(255, 211, 49, 58),
                                 width: 1,
                               ),
                               borderRadius: const BorderRadius.only(
