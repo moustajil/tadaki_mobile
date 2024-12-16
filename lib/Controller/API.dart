@@ -184,49 +184,6 @@ Future<void> sendQtOfCommand(
   }
 }
 
-Future<Map<String, dynamic>> getCartIfExists(
-    BuildContext context, String token) async {
-  try {
-    // Make the HTTP GET request
-    final response = await http.get(
-      Uri.parse('$baseUrl/api/mobile/order/cart'),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
-    );
-    // Check the response status code
-    if (response.statusCode == 200) {
-      final dynamic responseBody = jsonDecode(response.body);
-      return Map<String, dynamic>.from(responseBody);
-    } else if (response.statusCode == 401) {
-      if (context.mounted) {
-        showDialogForResponse(context, 'Unauthorized', 'Please log in again.');
-        Get.offAll(() => const SinginandSingout());
-      }
-    } else {
-      // Handle other errors
-      final errorBody = jsonDecode(response.body);
-      if (context.mounted) {
-        showDialogForResponse(
-          context,
-          'Error 12',
-          'Failed: ${errorBody['message'] ?? 'Unknown error'}',
-        );
-      }
-    }
-  } catch (e) {
-    // Handle any exceptions
-    if (context.mounted) {
-      showDialogForResponse(context, 'Error', 'An error occurred: $e');
-    }
-    debugPrint('Error 33: $e');
-  }
-
-  // Return an empty list in case of an error or failure
-  return {};
-}
-
 Future<Map<String, dynamic>> getInformationUser(
     BuildContext context, String token) async {
   try {
@@ -311,51 +268,51 @@ Future<void> sendEmailForRegistration(
   }
 }
 
-Future<void> deletOrder(BuildContext context, String token) async {
-  try {
-    // Show loading indicator
-    showDialog(
-        context: context,
-        builder: (_) => const Center(child: CircularProgressIndicator()));
+// Future<void> deletOrder(BuildContext context, String token) async {
+//   try {
+//     // Show loading indicator
+//     showDialog(
+//         context: context,
+//         builder: (_) => const Center(child: CircularProgressIndicator()));
 
-    final response = await http.delete(
-      Uri.parse('$baseUrl/api/mobile/order/cart'),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
-    );
+//     final response = await http.delete(
+//       Uri.parse('$baseUrl/api/mobile/order/cart'),
+//       headers: {
+//         'Content-Type': 'application/json',
+//         'Authorization': 'Bearer $token',
+//       },
+//     );
 
-    Navigator.pop(context);
+//     Navigator.pop(context);
 
-    // Handle response
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> responseBody = jsonDecode(response.body);
-      print(
-          'Response Body: ---------------------------------------------------  $responseBody');
-      if (context.mounted) {
-        Get.back();
-      }
-    } else if (response.statusCode == 401) {
-      if (context.mounted) {
-        showDialogForResponse(context, 'Unauthorized', 'Please log in again.');
-        Get.offAll(() => const SinginandSingout());
-      }
-    } else {
-      final errorBody = jsonDecode(response.body);
-      if (context.mounted) {
-        showDialogForResponse(
-          context,
-          'Error',
-          'Failed: ${errorBody['message'] ?? 'Unknown error'}',
-        );
-      }
-    }
-  } catch (e) {
-    Navigator.pop(context);
-    if (context.mounted) {
-      showDialogForResponse(context, 'Error', 'An error occurred: $e');
-    }
-    debugPrint('Error: $e');
-  }
-}
+//     // Handle response
+//     if (response.statusCode == 200) {
+//       final Map<String, dynamic> responseBody = jsonDecode(response.body);
+//       print(
+//           'Response Body: ---------------------------------------------------  $responseBody');
+//       if (context.mounted) {
+//         Get.back();
+//       }
+//     } else if (response.statusCode == 401) {
+//       if (context.mounted) {
+//         showDialogForResponse(context, 'Unauthorized', 'Please log in again.');
+//         Get.offAll(() => const SinginandSingout());
+//       }
+//     } else {
+//       final errorBody = jsonDecode(response.body);
+//       if (context.mounted) {
+//         showDialogForResponse(
+//           context,
+//           'Error',
+//           'Failed: ${errorBody['message'] ?? 'Unknown error'}',
+//         );
+//       }
+//     }
+//   } catch (e) {
+//     Navigator.pop(context);
+//     if (context.mounted) {
+//       showDialogForResponse(context, 'Error', 'An error occurred: $e');
+//     }
+//     debugPrint('Error: $e');
+//   }
+// }

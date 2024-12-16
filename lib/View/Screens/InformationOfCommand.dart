@@ -17,7 +17,7 @@ class Informationofcommand extends StatefulWidget {
 class _InformationofcommandState extends State<Informationofcommand> {
   final sharedPrefs = ControllerSharedPreferences();
   final otpVerificationController = Get.put(Otpverificationcontroller());
-  final infoControllerb = InformationofCommandController();
+  final infoControllerb = Get.put(InformationofCommandController());
   Map<String, dynamic>? commandDetail = {
     "id": 0,
     "createdAt": "",
@@ -55,6 +55,14 @@ class _InformationofcommandState extends State<Informationofcommand> {
             .then((_) {
           _startCountdown(); // Restart the countdown after sending the email.
         });
+      } else if (_remainingSeconds == 0) {
+        String? token = await sharedPrefs.getToken();
+
+        if (token == null || token.isEmpty) {
+          print("Token is null or empty");
+          return;
+        }
+        infoControllerb.deletOrder(context, token);
       }
     });
   }
@@ -81,7 +89,9 @@ class _InformationofcommandState extends State<Informationofcommand> {
       }
 
       // ignore: use_build_context_synchronously
-      final responseBody = await getCartIfExists(context, token);
+      final responseBody =
+          // ignore: use_build_context_synchronously
+          await infoControllerb.getCartIfExists(context, token);
 
       if (mounted) {
         setState(() {

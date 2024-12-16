@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:tadakir/Controller/ControllerSharedPrefrances.dart';
 import 'package:tadakir/Controller/EventListPageController.dart';
+import 'package:tadakir/Controller/InformationofCommandController.dart';
 import 'package:tadakir/View/Screens/HistoricCommadScreen.dart';
 import 'package:tadakir/View/Screens/InformationOfCommand.dart';
 import 'package:tadakir/View/Screens/ProfileInformation.dart';
@@ -20,6 +21,47 @@ class EventListPage extends StatefulWidget {
 class _EventListPageState extends State<EventListPage> {
   final sharedPrefs = ControllerSharedPreferences();
   final eventListController = Get.put(Eventlistpagecontroller());
+  final infoControllerb = Get.put(InformationofCommandController());
+
+  // late Timer _timer;
+  // int _remainingSeconds = 0; // Start with 0, will be updated later.
+  // bool _isEmailSent = false;
+  // DateTime currentTime = DateTime.now();
+  // DateTime? expiredAt;
+
+  // void _startCountdown() {
+  //   _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
+  //     if (_remainingSeconds > 0) {
+  //       setState(() {
+  //         _remainingSeconds--;
+  //       });
+  //     } else if (_remainingSeconds == 0 && !_isEmailSent) {
+  //       setState(() {
+  //         _isEmailSent = true;
+  //       });
+  //       // Avoid blocking the UI thread with await in countdown
+  //       otpVerificationController
+  //           .sendEmail(context, sharedPrefs.getEmail() as String)
+  //           .then((_) {
+  //         _startCountdown(); // Restart the countdown after sending the email.
+  //       });
+  //     } else if (_remainingSeconds == 0) {
+  //       String? token = await sharedPrefs.getToken();
+
+  //       if (token == null || token.isEmpty) {
+  //         print("Token is null or empty");
+  //         return;
+  //       }
+  //       infoControllerb.deletOrder(context, token);
+  //     }
+  //   });
+  // }
+
+  // String _formatTime(int seconds) {
+  //   final minutes = seconds ~/ 60;
+  //   final secs = seconds % 60;
+  //   return '${minutes.toString().padLeft(2, '0')}:${secs.toString().padLeft(2, '0')}';
+  // }
 
   // Add a GlobalKey for ScaffoldState and use it for closing and opening drawer
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -29,8 +71,19 @@ class _EventListPageState extends State<EventListPage> {
     super.initState();
     //eventListController.checkCartIfExists(context);
     //print("My carts is ${eventListController.myCart}");
+    checkCarts();
     eventListController.initializeData(context);
     eventListController.fetchEvents(context);
+  }
+
+  void checkCarts() async {
+    String? token = await sharedPrefs.getToken();
+
+    if (token == null || token.isEmpty) {
+      print("Token is null or empty");
+      return;
+    }
+    print(infoControllerb.getCartIfExists(context, token));
   }
 
   @override
@@ -38,7 +91,7 @@ class _EventListPageState extends State<EventListPage> {
     return Scaffold(
       key: _scaffoldKey, // Assign the GlobalKey to Scaffold
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(
@@ -50,20 +103,20 @@ class _EventListPageState extends State<EventListPage> {
             _scaffoldKey.currentState?.openDrawer();
           },
         ),
-        title: Container(
-          margin: const EdgeInsets.only(bottom: 15, top: 20),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: const TextField(
-            decoration: InputDecoration(
-              hintText: "Search...",
-              border: InputBorder.none,
-              prefixIcon: Icon(Icons.search),
-            ),
-          ),
-        ),
+        // title: Container(
+        //   margin: const EdgeInsets.only(bottom: 15, top: 20),
+        //   decoration: BoxDecoration(
+        //     color: Colors.white,
+        //     borderRadius: BorderRadius.circular(20),
+        //   ),
+        //   child: const TextField(
+        //     decoration: InputDecoration(
+        //       hintText: "Search...",
+        //       border: InputBorder.none,
+        //       prefixIcon: Icon(Icons.search),
+        //     ),
+        //   ),
+        // ),
         actions: [
           Stack(
             alignment: Alignment.center,
@@ -102,7 +155,8 @@ class _EventListPageState extends State<EventListPage> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            DrawerHeader(
+            Obx(
+              () => DrawerHeader(
                 decoration: const BoxDecoration(
                   color: Color.fromARGB(255, 211, 49, 58),
                 ),
@@ -147,7 +201,9 @@ class _EventListPageState extends State<EventListPage> {
                                 ),
                               ],
                             ),
-                          )),
+                          ),
+              ),
+            ),
             //
             const SizedBox(
               height: 10,
@@ -200,47 +256,50 @@ class _EventListPageState extends State<EventListPage> {
         ),
       ),
       backgroundColor: const Color(0xFFF6F6F6),
-      body: Obx(
-        () => eventListController.events.isEmpty
-            ? const Center(
-                child: Text(
-                  "No events available",
-                  style: TextStyle(fontSize: 16, color: Colors.grey),
+      body: Container(
+        color: Colors.white,
+        child: Obx(
+          () => eventListController.events.isEmpty
+              ? const Center(
+                  child: Text(
+                    "No events available",
+                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                  ),
+                )
+              : ListView.builder(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: eventListController.events.length,
+                  itemBuilder: (context, index) {
+                    return eventListController.eventCard(
+                      context: context,
+                      clubLogo:
+                          eventListController.events[index]['clubLogo'] ?? '',
+                      clubVistoreLogo: eventListController.events[index]
+                              ['clubVisitorLogo'] ??
+                          '',
+                      clubNomAr:
+                          eventListController.events[index]['clubNomAr'] ?? '',
+                      clubVisitoreNom: eventListController.events[index]
+                              ['clubVisitorNomAr'] ??
+                          '',
+                      evenementPrix: eventListController.events[index]
+                              ['evenementMinPrix'] ??
+                          '',
+                      dateOfEvenement: eventListController.events[index]
+                              ['evenementDateEvent'] ??
+                          '',
+                      localisationEvenement: eventListController.events[index]
+                              ['locationNomAr'] ??
+                          '',
+                      evenementId: eventListController.events[index]
+                          ['evenementId'],
+                      evenementName: eventListController.events[index]
+                              ['evenementNomFr'] ??
+                          '',
+                    );
+                  },
                 ),
-              )
-            : ListView.builder(
-                padding: const EdgeInsets.all(16),
-                itemCount: eventListController.events.length,
-                itemBuilder: (context, index) {
-                  return eventListController.eventCard(
-                    context: context,
-                    clubLogo:
-                        eventListController.events[index]['clubLogo'] ?? '',
-                    clubVistoreLogo: eventListController.events[index]
-                            ['clubVisitorLogo'] ??
-                        '',
-                    clubNomAr:
-                        eventListController.events[index]['clubNomAr'] ?? '',
-                    clubVisitoreNom: eventListController.events[index]
-                            ['clubVisitorNomAr'] ??
-                        '',
-                    evenementPrix: eventListController.events[index]
-                            ['evenementMinPrix'] ??
-                        '',
-                    dateOfEvenement: eventListController.events[index]
-                            ['evenementDateEvent'] ??
-                        '',
-                    localisationEvenement: eventListController.events[index]
-                            ['locationNomAr'] ??
-                        '',
-                    evenementId: eventListController.events[index]
-                        ['evenementId'],
-                    evenementName: eventListController.events[index]
-                            ['evenementNomFr'] ??
-                        '',
-                  );
-                },
-              ),
+        ),
       ),
     );
   }

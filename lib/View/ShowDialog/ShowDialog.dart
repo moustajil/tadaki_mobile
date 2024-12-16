@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tadakir/Controller/API.dart';
 import 'package:tadakir/Controller/ControllerSharedPrefrances.dart';
+import 'package:tadakir/Controller/InformationofCommandController.dart';
 import 'package:tadakir/View/Screens/SingInAndSingOut.dart';
 
+final informationController = Get.put(InformationofCommandController());
 // ignore: non_constant_identifier_names
 void ShowDialogQt(
   BuildContext context,
@@ -393,7 +395,7 @@ void showDialogForCancelOrder(BuildContext context, String token) {
                 onPressed: () async {
                   try {
                     // Call the deletOrder function and wait for it to finish
-                    await deletOrder(context, token);
+                    await informationController.deletOrder(context, token);
 
                     // After successful deletion, pop the current screen
                     Get.back();
