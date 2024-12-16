@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:tadakir/Controller/ControllerSharedPrefrances.dart';
@@ -20,16 +19,6 @@ class _OtpVerificationState extends State<OtpVerification> {
   void initState() {
     super.initState();
     otpVerificationController.startCountdown(context);
-  }
-
-  Future<void> sendEmailAndRestartTimer() async {
-    try {
-      dynamic email = sharedsPrefrenaces.getEmail();
-      await otpVerificationController.sendEmail(context, email);
-    } catch (e) {
-      // Handle any exceptions (e.g., log or show an error message)
-      print('Error sending email: $e');
-    }
   }
 
   @override
@@ -68,10 +57,7 @@ class _OtpVerificationState extends State<OtpVerification> {
               children: [
                 const SizedBox(height: 20),
                 Image.asset(
-                  'assets/images/otp_img.png',
-                  width: MediaQuery.of(context).size.width * 0.7,
-                  height: MediaQuery.of(context).size.height * 0.3,
-                  fit: BoxFit.contain,
+                  'assets/images/otp.png',
                 ),
                 const SizedBox(height: 60),
                 const Text(
@@ -123,24 +109,16 @@ class _OtpVerificationState extends State<OtpVerification> {
                               horizontal: 16,
                               vertical: 8), // Set background color
                         ),
-                        child: otpVerificationController.isLoading.value
-                            ? const SizedBox(
-                                height: 20,
-                                child: CircularProgressIndicator(
-                                  color: Color.fromARGB(255, 211, 49, 58),
-                                  strokeWidth: 1,
-                                ),
-                              )
-                            : const Padding(
-                                padding: EdgeInsets.only(bottom: 3, top: 3),
-                                child: Text(
-                                  'Verify',
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
+                        child: const Padding(
+                          padding: EdgeInsets.only(bottom: 3, top: 3),
+                          child: Text(
+                            'Verify',
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
                       );
                     },
                   ),

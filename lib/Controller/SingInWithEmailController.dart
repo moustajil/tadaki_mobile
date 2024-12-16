@@ -24,8 +24,7 @@ class Singinwithemailcontroller extends GetxController {
     isLoading.value = true;
 
     try {
-      await Future.delayed(
-          const Duration(seconds: 2)); 
+      await Future.delayed(const Duration(seconds: 3));
       // ignore: use_build_context_synchronously
       sendEmail(context, email.trim());
     } catch (e) {

@@ -15,6 +15,7 @@ class Otpverificationcontroller extends GetxController {
   late Timer timer;
   final String baseUrl = "https://preprod.tadakir.net";
 
+  // check if otp correct or not
   void handlingClickOnVerificationOtp(BuildContext context, String otp) async {
     if (otp.length == 6) {
       final email = await ctrPrefs.getEmail();
@@ -29,7 +30,7 @@ class Otpverificationcontroller extends GetxController {
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              backgroundColor: const Color.fromARGB(255, 211, 49, 58),
+              backgroundColor: Color.fromARGB(255, 211, 49, 58),
               content: Text('No email found. Please try again.'),
             ),
           );
@@ -39,7 +40,7 @@ class Otpverificationcontroller extends GetxController {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            backgroundColor: const Color.fromARGB(255, 211, 49, 58),
+            backgroundColor: Color.fromARGB(255, 211, 49, 58),
             content: Text('Please enter a valid 6-digit OTP'),
           ),
         );
@@ -47,6 +48,7 @@ class Otpverificationcontroller extends GetxController {
     }
   }
 
+  // send otp and email to server
   Future<void> sendEmailAndOtpVerification(
       BuildContext context, String email, String otp) async {
     const String baseUrl = "https://preprod.tadakir.net";
@@ -138,6 +140,18 @@ class Otpverificationcontroller extends GetxController {
     }
   }
 
+  // Send Email to server
+  Future<void> sendEmailAndRestartTimer(BuildContext context) async {
+    try {
+      dynamic email = ctrPrefs.getEmail();
+      await sendEmail(context, email);
+    } catch (e) {
+      debugPrint('Error sending email: $e');
+    }
+  }
+  
+
+  // Show respone for otp to resent send it to email
   void showResendOtpDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -197,6 +211,7 @@ class Otpverificationcontroller extends GetxController {
     );
   }
 
+  // start count if user retuen resent code otp to email
   void startCountdown(BuildContext context) {
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (remainingSeconds > 0) {
@@ -208,6 +223,9 @@ class Otpverificationcontroller extends GetxController {
     });
   }
 
+
+
+  // send email
   Future<void> sendEmail(BuildContext context, String email) async {
     try {
       final response = await http.post(
