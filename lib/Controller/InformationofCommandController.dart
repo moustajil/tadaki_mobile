@@ -6,7 +6,7 @@ import 'package:tadakir/Controller/ControllerSharedPrefrances.dart';
 
 class InformationofCommandController extends GetxController {
   final sharedPrefs = ControllerSharedPreferences();
-  late RxMap commandDetail = {
+  RxMap commandDetail = {
     "id": 0,
     "createdAt": "",
     "expiredAt": "",
