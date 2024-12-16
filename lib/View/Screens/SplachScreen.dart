@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/get_navigation.dart';
-import 'package:tadakir/Controller/API.dart';
+import 'package:get/get.dart';
 import 'package:tadakir/Controller/ControllerSharedPrefrances.dart';
 import 'package:tadakir/Controller/InformationUserController.dart';
+import 'package:tadakir/Controller/SplachScreenController.dart';
 import 'package:tadakir/View/Screens/SingInAndSingOut.dart';
 
 class SplachScreen extends StatefulWidget {
@@ -18,7 +17,8 @@ class _SplachScreenState extends State<SplachScreen>
   late AnimationController _controller;
   late Animation<double> _animation;
   var sharedPrefers = ControllerSharedPreferences();
-  final infoUserController = Informationusercontroller();
+  final infoUserController = Get.put(Informationusercontroller());
+  final splachscreenController = Get.put(Splachscreencontroller());
   String? mytk;
 
   @override
@@ -48,9 +48,7 @@ class _SplachScreenState extends State<SplachScreen>
         Get.to(const SinginandSingout());
       } else {
         // ignore: use_build_context_synchronously
-        checkTokenIfValidOrNot(context, token);
-        //getInformationUser(context, token);
-        
+        splachscreenController.checkTokenIfValidOrNot(context, token);
       }
     });
   }

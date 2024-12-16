@@ -15,33 +15,6 @@ import 'package:tadakir/View/ShowDialog/ShowDialog.dart';
 const String baseUrl = "https://preprod.tadakir.net";
 final ctrEmail = ControllerSharedPreferences();
 
-// Function To check if tocken is exists or note
-Future<void> checkTokenIfValidOrNot(BuildContext context, String token) async {
-  try {
-    final response = await http.get(
-      Uri.parse('$baseUrl/api/mobile/profile'),
-      headers: {
-        'Content-Type': 'application/json',
-        "Authorization": "Bearer $token"
-      },
-    );
-    if (!context.mounted) return;
-    final dynamic responseBody = jsonDecode(response.body);
-
-    if (response.statusCode == 200) {
-      Get.off(const EventListPage());
-    } else if (response.statusCode == 401) {
-      Get.off(const SinginandSingout());
-    } else {
-      showDialogForResponse(context, 'Error',
-          'Unexpected response 1: ${responseBody["message"]}');
-    }
-  } catch (e) {
-    if (context.mounted) {
-      Get.off(const SinginandSingout());
-    }
-  }
-}
 
 Future<List<Map<String, dynamic>>> getAllElementInformation(
     BuildContext context, String token) async {
